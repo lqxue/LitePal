@@ -2,13 +2,13 @@ package org.litepal.litepalsample;
 
 import android.app.Application;
 
-import org.litepal.LitePal;
+import org.litepal.Operator;
 
 public class MyApplication extends Application{
 
     @Override
     public void onCreate() {
         super.onCreate();
-        LitePal.initialize(this);
+        Operator.initialize(this);
     }
 }
