@@ -1,26 +1,6 @@
-/*
- * Copyright (C)  Tony Green, LitePal Framework Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.litepal.tablemanager;
-
-import java.util.ArrayList;
+package com.litepal.tablemanager;import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-
-import com.litepal.parser.LitePalAttr;
+import java.util.List;import com.litepal.parser.LitePalAttr;
 import com.litepal.tablemanager.model.AssociationsModel;
 import com.litepal.tablemanager.model.ColumnModel;
 import com.litepal.tablemanager.model.GenericModel;
@@ -28,13 +8,7 @@ import com.litepal.tablemanager.model.TableModel;
 import com.litepal.util.Const;
 import com.litepal.util.DBUtility;
 import com.litepal.util.BaseUtility;
-import com.litepal.util.LitePalLog;
-
-import android.database.sqlite.SQLiteDatabase;
-
-import com.litepal.exceptions.DatabaseGenerateException;
-
-/**
+import com.litepal.util.LitePalLog;import android.database.sqlite.SQLiteDatabase;import com.litepal.exceptions.DatabaseGenerateException;/**
  * Upgrade the associations between model classes into tables. Creating new
  * tables and adding new foreign key columns are done in
  * {@link AssociationUpdater}. So this class just deal with the simple job of
@@ -43,29 +17,19 @@ import com.litepal.exceptions.DatabaseGenerateException;
  * @author Tony Green
  * @since 1.0
  */
-public abstract class AssociationUpdater extends Creator {
-
-	public static final String TAG = "AssociationUpdater";
-
-	/**
+public abstract class AssociationUpdater extends Creator {public static final String TAG = "AssociationUpdater";/**
 	 * A collection contains all the association models.
 	 */
-	private Collection<AssociationsModel> mAssociationModels;
-
-	/**
+	private Collection<AssociationsModel> mAssociationModels;/**
 	 * Instance of SQLiteDatabase.
 	 */
-	protected SQLiteDatabase mDb;
-
-	/**
+	protected SQLiteDatabase mDb;/**
 	 * Analysis the {@link TableModel} by the purpose of subclasses, and
 	 * generate a SQL to do the intention job. The implementation of this method
 	 * is totally delegated to the subclasses.
 	 */
 	@Override
-	protected abstract void createOrUpgradeTable(SQLiteDatabase db, boolean force);
-
-	/**
+	protected abstract void createOrUpgradeTable(SQLiteDatabase db, boolean force);/**
 	 * {@link AssociationUpdater} does two jobs. Removing foreign key columns
 	 * when two models are not associated anymore, and remove the intermediate
 	 * join tables when two models are not associated anymore.
@@ -75,9 +39,7 @@ public abstract class AssociationUpdater extends Creator {
 		mAssociationModels = getAllAssociations();
 		mDb = db;
 		removeAssociations();
-	}
-
-	/**
+	}/**
 	 * This method looks around all the columns in the table, and judge which of
 	 * them are foreign key columns.
 	 * 
@@ -100,9 +62,7 @@ public abstract class AssociationUpdater extends Creator {
 			}
 		}
 		return foreignKeyColumns;
-	}
-
-	/**
+	}/**
 	 * Judge the passed in column is a foreign key column or not. Each column
 	 * name ends with _id will be considered as foreign key column.
 	 * 
@@ -115,9 +75,7 @@ public abstract class AssociationUpdater extends Creator {
 	 */
 	protected boolean isForeignKeyColumn(TableModel tableModel, String columnName) {
 		return BaseUtility.containsIgnoreCases(getForeignKeyColumns(tableModel), columnName);
-	}
-
-	/**
+	}/**
 	 * Look from the database to find a table named same as the table name in
 	 * table model. Then iterate the columns and types of this table to create a
 	 * new instance of table model. If there's no such a table in the database,
@@ -130,9 +88,7 @@ public abstract class AssociationUpdater extends Creator {
 	 */
 	protected TableModel getTableModelFromDB(String tableName) {
 		return DBUtility.findPragmaTableInfo(tableName, mDb);
-	}
-
-	/**
+	}/**
 	 * Drop the tables by the passing table name.
 	 * 
 	 * @param dropTableNames
@@ -148,9 +104,7 @@ public abstract class AssociationUpdater extends Creator {
 			}
 			execute(dropTableSQLS, db);
 		}
-	}
-
-	/**
+	}/**
 	 * When some fields are removed from class, the table should synchronize the
 	 * changes by removing the corresponding columns.
 	 * 
@@ -163,9 +117,7 @@ public abstract class AssociationUpdater extends Creator {
 		if (removeColumnNames != null && !removeColumnNames.isEmpty()) {
 			execute(getRemoveColumnSQLs(removeColumnNames, tableName), mDb);
 		}
-	}
-
-	/**
+	}/**
 	 * The values in table_schame should be synchronized with the model tables
 	 * in the database. If a model table is dropped, the corresponding data
 	 * should be removed from table_schema too.
@@ -191,9 +143,7 @@ public abstract class AssociationUpdater extends Creator {
             sqls.add(deleteData.toString());
 			execute(sqls, mDb);
 		}
-	}
-
-	/**
+	}/**
 	 * When the association between two tables are no longer associated in the
 	 * classes, database should remove the foreign key column or intermediate
 	 * join table that keeps these two tables associated.
@@ -202,9 +152,7 @@ public abstract class AssociationUpdater extends Creator {
 		removeForeignKeyColumns();
 		removeIntermediateTables();
         removeGenericTables();
-	}
-
-	/**
+	}/**
 	 * Analyzing the table models, then remove all the foreign key columns if
 	 * their association in model classes are no longer exist any more.
 	 */
@@ -213,9 +161,7 @@ public abstract class AssociationUpdater extends Creator {
 			TableModel tableModel = getTableModel(className);
 			removeColumns(findForeignKeyToRemove(tableModel), tableModel.getTableName());
 		}
-	}
-
-	/**
+	}/**
 	 * If there're intermediate join tables for two tables, when the two classes
 	 * are not associated, the join table should be dropped.
 	 */
@@ -223,9 +169,7 @@ public abstract class AssociationUpdater extends Creator {
 		List<String> tableNamesToDrop = findIntermediateTablesToDrop();
 		dropTables(tableNamesToDrop, mDb);
 		clearCopyInTableSchema(tableNamesToDrop);
-	}
-
-    /**
+	}/**
      * If there're generic tables for generic fields, when the fields are removed
      * from class, the generic tables should be dropped.
      */
@@ -233,9 +177,7 @@ public abstract class AssociationUpdater extends Creator {
         List<String> tableNamesToDrop = findGenericTablesToDrop();
         dropTables(tableNamesToDrop, mDb);
         clearCopyInTableSchema(tableNamesToDrop);
-    }
-
-	/**
+    }/**
 	 * This method gives back the names of the foreign key columns that need to
 	 * remove, cause their associations in the classes are no longer exist.
 	 * 
@@ -257,9 +199,7 @@ public abstract class AssociationUpdater extends Creator {
 		LitePalLog.d(TAG, "findForeignKeyToRemove >> " + tableModel.getTableName() + " "
 				+ removeRelations);
 		return removeRelations;
-	}
-
-	/**
+	}/**
 	 * When many2many associations are no longer exist between two models, the
 	 * intermediate join table should be dropped from database. This method
 	 * helps find out those intermediate join tables which should be dropped
@@ -290,9 +230,7 @@ public abstract class AssociationUpdater extends Creator {
 		}
 		LitePalLog.d(TAG, "findIntermediateTablesToDrop >> " + intermediateTables);
 		return intermediateTables;
-	}
-
-    /**
+	}/**
      * When generic fields are no longer exist in the class models, the generic tables should be
      * dropped from database. This method helps find out those generic tables which should be dropped
      * cause their generic fields in classes are removed.
@@ -317,9 +255,7 @@ public abstract class AssociationUpdater extends Creator {
             }
         }
         return genericTablesToDrop;
-    }
-
-	/**
+    }/**
 	 * Generate a SQL for renaming the table into a temporary table.
 	 * 
 	 * @param tableName
@@ -331,9 +267,7 @@ public abstract class AssociationUpdater extends Creator {
 		sql.append("alter table ").append(tableName).append(" rename to ")
 				.append(getTempTableName(tableName));
 		return sql.toString();
-	}
-
-	/**
+	}/**
 	 * Generate a SQL to create new table by the table model from database. Also
 	 * it will remove the columns that need to remove before generating the SQL.
 	 * 
@@ -348,9 +282,7 @@ public abstract class AssociationUpdater extends Creator {
             tableModel.removeColumnModelByName(removeColumnName);
 		}
 		return generateCreateTableSQL(tableModel);
-	}
-
-	/**
+	}/**
 	 * Generate a SQL to do the data migration job to avoid losing data.
 	 *
 	 * @param tableModel
@@ -386,9 +318,7 @@ public abstract class AssociationUpdater extends Creator {
 		} else {
 			return null;
 		}
-	}
-
-	/**
+	}/**
 	 * Generate a SQL to drop the temporary table.
 	 * 
 	 * @param tableName
@@ -397,9 +327,7 @@ public abstract class AssociationUpdater extends Creator {
 	 */
 	protected String generateDropTempTableSQL(String tableName) {
 		return generateDropTableSQL(getTempTableName(tableName));
-	}
-
-	/**
+	}/**
 	 * Removing or resizing columns from tables must need a temporary table to
 	 * store data, and here's the table name.
 	 * 
@@ -409,9 +337,7 @@ public abstract class AssociationUpdater extends Creator {
 	 */
 	protected String getTempTableName(String tableName) {
 		return tableName + "_temp";
-	}
-
-	/**
+	}/**
 	 * This method create a SQL array for the whole remove dump columns job.
 	 * 
 	 * @param removeColumnNames
@@ -437,9 +363,7 @@ public abstract class AssociationUpdater extends Creator {
         sqls.add(dataMigrationSQL);
         sqls.add(dropTempTableSQL);
 		return sqls;
-	}
-
-	/**
+	}/**
 	 * Judge if the current iterated foreign key column should be dropped. It is
 	 * only used in {@link #findForeignKeyToRemove(TableModel)} when iterating
 	 * the foreign key column list. When this foreign key can not be found in
@@ -474,9 +398,7 @@ public abstract class AssociationUpdater extends Creator {
 			}
 		}
 		return true;
-	}
-
-	/**
+	}/**
 	 * Judge if the tableName1 equals {@link AssociationsModel#getTableName()}
 	 * and tableName2 equals {@link AssociationsModel#getAssociatedTableName()}.
 	 * 
@@ -494,6 +416,4 @@ public abstract class AssociationUpdater extends Creator {
 			String tableName2) {
 		return associationModel.getTableName().equalsIgnoreCase(tableName1)
 				&& associationModel.getAssociatedTableName().equalsIgnoreCase(tableName2);
-	}
-
-}
+	}}

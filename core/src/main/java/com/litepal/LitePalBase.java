@@ -1,22 +1,4 @@
-/*
- * Copyright (C)  Tony Green, LitePal Framework Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.litepal;
-
-import com.litepal.annotation.Column;
+package com.litepal;import com.litepal.annotation.Column;
 import com.litepal.crud.LitePalSupport;
 import com.litepal.exceptions.DatabaseGenerateException;
 import com.litepal.parser.LitePalAttr;
@@ -34,9 +16,7 @@ import com.litepal.tablemanager.typechange.TextOrm;
 import com.litepal.crud.model.AssociationsInfo;
 import com.litepal.util.BaseUtility;
 import com.litepal.util.Const;
-import com.litepal.util.DBUtility;
-
-import java.lang.reflect.Field;
+import com.litepal.util.DBUtility;import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -46,9 +26,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-/**
+import java.util.Set;/**
  * Base class of all the LitePal components. If each component need to
  * interactive with other components or they have some same logic with duplicate
  * codes, LitePalBase may be the solution.
@@ -56,52 +34,32 @@ import java.util.Set;
  * @author Tony Green
  * @since 1.1
  */
-public abstract class LitePalBase {
-
-	public static final String TAG = "LitePalBase";
-
-	/**
+public abstract class LitePalBase {public static final String TAG = "LitePalBase";/**
 	 * Action to get associations.
 	 */
-	private static final int GET_ASSOCIATIONS_ACTION = 1;
-
-	/**
+	private static final int GET_ASSOCIATIONS_ACTION = 1;/**
 	 * Action to get association info.
 	 */
-	private static final int GET_ASSOCIATION_INFO_ACTION = 2;
-
-	/**
+	private static final int GET_ASSOCIATION_INFO_ACTION = 2;/**
 	 * All the supporting mapping types currently in the array.
 	 */
 	private OrmChange[] typeChangeRules = { new NumericOrm(), new TextOrm(), new BooleanOrm(),
-			new DecimalOrm(), new DateOrm(), new BlobOrm()};
-
-    /**
+			new DecimalOrm(), new DateOrm(), new BlobOrm()};/**
      * This is map of class name to fields list. Indicates that each class has which supported fields.
      */
-    private Map<String, List<Field>> classFieldsMap = new HashMap<String, List<Field>>();
-
-	/**
+    private Map<String, List<Field>> classFieldsMap = new HashMap<String, List<Field>>();/**
 	 * This is map of class name to generic fields list. Indicates that each class has which supported generic fields.
 	 */
-    private Map<String, List<Field>> classGenericFieldsMap = new HashMap<String, List<Field>>();
-
-	/**
+    private Map<String, List<Field>> classGenericFieldsMap = new HashMap<String, List<Field>>();/**
 	 * The collection contains all association models.
 	 */
-	private Collection<AssociationsModel> mAssociationModels;
-
-	/**
+	private Collection<AssociationsModel> mAssociationModels;/**
 	 * The collection contains all association info.
 	 */
-	private Collection<AssociationsInfo> mAssociationInfos;
-
-    /**
+	private Collection<AssociationsInfo> mAssociationInfos;/**
      * The collection contains all generic models.
      */
-    private Collection<GenericModel> mGenericModels;
-
-	/**
+    private Collection<GenericModel> mGenericModels;/**
 	 * This method is used to get the table model by the class name passed
 	 * in. The principle to generate table model is that each field in the class
 	 * with non-static modifier and has a type among int/Integer, long/Long,
@@ -126,9 +84,7 @@ public abstract class LitePalBase {
             tableModel.addColumnModel(columnModel);
 		}
 		return tableModel;
-	}
-
-	/**
+	}/**
 	 * This method is used to get association models depends on the given class
 	 * name list.
 	 * 
@@ -149,17 +105,13 @@ public abstract class LitePalBase {
 			analyzeClassFields(className, GET_ASSOCIATIONS_ACTION);
 		}
 		return mAssociationModels;
-	}
-
-    /**
+	}/**
      * Get all generic models for create generic tables.
      * @return All generic models.
      */
     protected Collection<GenericModel> getGenericModels() {
         return mGenericModels;
-    }
-
-	/**
+    }/**
 	 * Get the association info model by the class name.
 	 * 
 	 * @param className
@@ -173,9 +125,7 @@ public abstract class LitePalBase {
 		mAssociationInfos.clear();
 		analyzeClassFields(className, GET_ASSOCIATION_INFO_ACTION);
 		return mAssociationInfos;
-	}
-
-	/**
+	}/**
 	 * Find all the fields in the class. But not each field is supported to add
 	 * a column to the table. Only the basic data types and String are
 	 * supported. This method will intercept all the types which are not
@@ -200,9 +150,7 @@ public abstract class LitePalBase {
             return supportedFields;
         }
         return fieldList;
-	}
-
-    /**
+	}/**
      * Find all supported generic fields in the class. Supporting rule is in {@link BaseUtility#isGenericTypeSupported(String)}.
      * @param className
      *           The full name of the class.
@@ -223,9 +171,7 @@ public abstract class LitePalBase {
             return supportedGenericFields;
         }
         return genericFieldList;
-	}
-
-	/**
+	}/**
 	 * If the field type implements from List or Set, regard it as a collection.
 	 * 
 	 * @param fieldType
@@ -234,9 +180,7 @@ public abstract class LitePalBase {
 	 */
 	protected boolean isCollection(Class<?> fieldType) {
 		return isList(fieldType) || isSet(fieldType);
-	}
-
-	/**
+	}/**
 	 * If the field type implements from List, regard it as a list.
 	 * 
 	 * @param fieldType
@@ -245,9 +189,7 @@ public abstract class LitePalBase {
 	 */
 	protected boolean isList(Class<?> fieldType) {
 		return List.class.isAssignableFrom(fieldType);
-	}
-
-	/**
+	}/**
 	 * If the field type implements from Set, regard it as a set.
 	 * 
 	 * @param fieldType
@@ -256,9 +198,7 @@ public abstract class LitePalBase {
 	 */
 	protected boolean isSet(Class<?> fieldType) {
 		return Set.class.isAssignableFrom(fieldType);
-	}
-
-	/**
+	}/**
 	 * Judge the passed in column is an id column or not. The column named id or
 	 * _id will be considered as id column.
 	 * 
@@ -268,9 +208,7 @@ public abstract class LitePalBase {
 	 */
 	protected boolean isIdColumn(String columnName) {
 		return "_id".equalsIgnoreCase(columnName) || "id".equalsIgnoreCase(columnName);
-	}
-
-	/**
+	}/**
 	 * If two tables are associated, one table have a foreign key column. The
 	 * foreign key column name will be the associated table name with _id
 	 * appended.
@@ -281,9 +219,7 @@ public abstract class LitePalBase {
 	 */
 	protected String getForeignKeyColumnName(String associatedTableName) {
 		return BaseUtility.changeCase(associatedTableName + "_id");
-	}
-
-    /**
+	}/**
      * Get the column type for creating table by field type.
      * @param fieldType
      *          Type of field.
@@ -298,9 +234,7 @@ public abstract class LitePalBase {
             }
         }
         return null;
-    }
-
-    /**
+    }/**
      * Get the generic type class of List or Set. If there's no generic type of
      * List or Set return null.
      *
@@ -317,9 +251,7 @@ public abstract class LitePalBase {
             }
         }
         return null;
-    }
-
-    private void recursiveSupportedFields(Class<?> clazz, List<Field> supportedFields) {
+    }private void recursiveSupportedFields(Class<?> clazz, List<Field> supportedFields) {
         if (clazz == LitePalSupport.class || clazz == Object.class) {
             return;
         }
@@ -341,9 +273,7 @@ public abstract class LitePalBase {
             }
         }
         recursiveSupportedFields(clazz.getSuperclass(), supportedFields);
-    }
-
-    private void recursiveSupportedGenericFields(Class<?> clazz, List<Field> supportedGenericFields) {
+    }private void recursiveSupportedGenericFields(Class<?> clazz, List<Field> supportedGenericFields) {
         if (clazz == LitePalSupport.class || clazz == Object.class) {
             return;
         }
@@ -364,9 +294,7 @@ public abstract class LitePalBase {
             }
         }
         recursiveSupportedGenericFields(clazz.getSuperclass(), supportedGenericFields);
-    }
-
-	/**
+    }/**
 	 * Introspection of the passed in class. Analyze the fields of current class
 	 * and find out the associations of it.
 	 * 
@@ -394,9 +322,7 @@ public abstract class LitePalBase {
 			ex.printStackTrace();
 			throw new DatabaseGenerateException(DatabaseGenerateException.CLASS_NOT_FOUND + className);
 		}
-	}
-
-	/**
+	}/**
 	 * Check the field is a non primitive field or not.
 	 * 
 	 * @param field
@@ -405,9 +331,7 @@ public abstract class LitePalBase {
 	 */
 	private boolean isNonPrimitive(Field field) {
 		return !field.getType().isPrimitive();
-	}
-
-    /**
+	}/**
      * Check the field is a private field or not.
      *
      * @param field
@@ -416,9 +340,7 @@ public abstract class LitePalBase {
      */
 	private boolean isPrivate(Field field) {
         return Modifier.isPrivate(field.getModifiers());
-    }
-
-	/**
+    }/**
 	 * Deals with one to any association conditions. e.g. Song and Album. An
 	 * album have many songs, and a song belongs to one album. So if there's an
 	 * Album model defined in Song with private modifier, and in Album there's a
@@ -502,9 +424,7 @@ public abstract class LitePalBase {
                 }
             }
 		}
-	}
-
-	/**
+	}/**
 	 * Deals with one to any association conditions. e.g. Song and Album. An
 	 * album have many songs, and a song belongs to one album. So if there's an
 	 * Album model defined in Song with private modifier, and in Album there's a
@@ -608,9 +528,7 @@ public abstract class LitePalBase {
                 mGenericModels.add(genericModel);
             }
 		}
-	}
-
-	/**
+	}/**
 	 * Package a {@link AssociationsModel}, and add it into
 	 * {@link #mAssociationModels} Collection.
 	 * 
@@ -631,9 +549,7 @@ public abstract class LitePalBase {
 		associationModel.setTableHoldsForeignKey(DBUtility.getTableNameByClassName(classHoldsForeignKey));
 		associationModel.setAssociationType(associationType);
 		mAssociationModels.add(associationModel);
-	}
-
-	/**
+	}/**
 	 * Package a {@link AssociationsInfo}, and add it into
 	 * {@link #mAssociationInfos} Collection.
 	 * 
@@ -663,9 +579,7 @@ public abstract class LitePalBase {
 		associationInfo.setAssociateSelfFromOtherModel(associateSelfFromOtherModel);
 		associationInfo.setAssociationType(associationType);
 		mAssociationInfos.add(associationInfo);
-	}
-
-	/**
+	}/**
 	 * Get the generic type name of List or Set. If there's no generic type of
 	 * List or Set return null.
 	 * 
@@ -679,9 +593,7 @@ public abstract class LitePalBase {
             return genericTypeClass.getName();
         }
         return null;
-	}
-
-    /**
+	}/**
      * Convert a field instance into A ColumnModel instance. ColumnModel can provide information
      * when creating table.
      * @param field
@@ -707,6 +619,4 @@ public abstract class LitePalBase {
         columnModel.setUnique(unique);
         columnModel.setDefaultValue(defaultValue);
         return columnModel;
-    }
-
-}
+    }}

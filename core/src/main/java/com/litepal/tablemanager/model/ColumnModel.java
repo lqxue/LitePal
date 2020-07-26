@@ -1,93 +1,43 @@
-/*
- * Copyright (C)  Tony Green, LitePal Framework Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.litepal.tablemanager.model;
-
-import android.text.TextUtils;
-
-/**
+package com.litepal.tablemanager.model;import android.text.TextUtils;/**
  * This is a model class for columns. It stores column name, column type, and column constraints
  * information.
  * @author Tony Green
  * @since 1.3
  */
-public class ColumnModel {
-
-    /**
+public class ColumnModel {/**
      * Name of column.
      */
-    private String columnName;
-
-    /**
+    private String columnName;/**
      * Type for column.
      */
-    private String columnType;
-
-    /**
+    private String columnType;/**
      * Nullable constraint.
      */
-    private boolean isNullable = true;
-
-    /**
+    private boolean isNullable = true;/**
      * Unique constraint.
      */
-    private boolean isUnique = false;
-
-    /**
+    private boolean isUnique = false;/**
      * Default constraint.
      */
-    private String defaultValue = "";
-
-    public String getColumnName() {
+    private String defaultValue = "";public String getColumnName() {
         return columnName;
-    }
-
-    public void setColumnName(String columnName) {
+    }public void setColumnName(String columnName) {
         this.columnName = columnName;
-    }
-
-    public String getColumnType() {
+    }public String getColumnType() {
         return columnType;
-    }
-
-    public void setColumnType(String columnType) {
+    }public void setColumnType(String columnType) {
         this.columnType = columnType;
-    }
-
-    public boolean isNullable() {
+    }public boolean isNullable() {
         return isNullable;
-    }
-
-    public void setNullable(boolean isNullable) {
+    }public void setNullable(boolean isNullable) {
         this.isNullable = isNullable;
-    }
-
-    public boolean isUnique() {
+    }public boolean isUnique() {
         return isUnique;
-    }
-
-    public void setUnique(boolean isUnique) {
+    }public void setUnique(boolean isUnique) {
         this.isUnique = isUnique;
-    }
-
-    public String getDefaultValue() {
+    }public String getDefaultValue() {
         return defaultValue;
-    }
-
-    public void setDefaultValue(String defaultValue) {
+    }public void setDefaultValue(String defaultValue) {
         if ("text".equalsIgnoreCase(columnType)) {
             if (!TextUtils.isEmpty(defaultValue)) {
                 this.defaultValue = "'" + defaultValue + "'";
@@ -95,14 +45,10 @@ public class ColumnModel {
         } else {
             this.defaultValue = defaultValue;
         }
-    }
-
-    /**
+    }/**
      * Judge current ColumnModel is id column or not.
      * @return True if it's id column. False otherwise.
      */
     public boolean isIdColumn() {
         return "_id".equalsIgnoreCase(columnName) || "id".equalsIgnoreCase(columnName);
-    }
-
-}
+    }}

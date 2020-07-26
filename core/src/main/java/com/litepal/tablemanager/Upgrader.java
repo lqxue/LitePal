@@ -1,36 +1,12 @@
-/*
- * Copyright (C)  Tony Green, LitePal Framework Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.litepal.tablemanager;
-
-import android.database.sqlite.SQLiteDatabase;
-import android.text.TextUtils;
-
-import com.litepal.crud.model.AssociationsInfo;
+package com.litepal.tablemanager;import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;import com.litepal.crud.model.AssociationsInfo;
 import com.litepal.tablemanager.model.ColumnModel;
 import com.litepal.tablemanager.model.TableModel;
 import com.litepal.util.Const;
 import com.litepal.util.DBUtility;
-import com.litepal.util.LitePalLog;
-
-import java.util.ArrayList;
+import com.litepal.util.LitePalLog;import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-
-/**
+import java.util.List;/**
  * Upgrade the database. The first step is to remove the columns that can not
  * find the corresponding field in the model class. Then add the new added field
  * as new column into the table. At last it will check all the types of columns
@@ -43,19 +19,13 @@ public class Upgrader extends AssociationUpdater {
 	/**
 	 * Model class for table.
 	 */
-	protected TableModel mTableModel;
-
-    /**
+	protected TableModel mTableModel;/**
      * Model class for table from database.
      */
-    protected TableModel mTableModelDB;
-
-    /**
+    protected TableModel mTableModelDB;/**
      * Indicates that column constraints has changed or not.
      */
-    private boolean hasConstraintChanged;
-
-	/**
+    private boolean hasConstraintChanged;/**
 	 * Analyzing the table model, them remove the dump columns and add new
 	 * columns of a table.
 	 */
@@ -68,9 +38,7 @@ public class Upgrader extends AssociationUpdater {
             LitePalLog.d(TAG, "createOrUpgradeTable: model is " + mTableModel.getTableName());
             upgradeTable();
 		}
-	}
-
-	/**
+	}/**
 	 * Upgrade table actions. Include remove dump columns, add new columns and
 	 * change column types. All the actions above will be done by the description
      * order.
@@ -97,9 +65,7 @@ public class Upgrader extends AssociationUpdater {
             changeColumnsType(findColumnTypesToChange());
             changeColumnsConstraints();
         }
-	}
-
-    /**
+	}/**
      * Check if the current model add or upgrade an unique or not null column.
      * @return True if has new unique or not null column. False otherwise.
      */
@@ -118,9 +84,7 @@ public class Upgrader extends AssociationUpdater {
             }
         }
         return false;
-    }
-
-	/**
+    }/**
 	 * It will find the difference between class model and table model. If
 	 * there's a field in the class without a corresponding column in the table,
 	 * this field is a new added column. This method find all new added columns.
@@ -137,9 +101,7 @@ public class Upgrader extends AssociationUpdater {
             }
         }
 		return columnsToAdd;
-	}
-
-	/**
+	}/**
 	 * This method helps find the difference between table model from class and
 	 * table model from database. Database should always be synchronized with
 	 * model class. If there're some fields are removed from class, the table
@@ -162,9 +124,7 @@ public class Upgrader extends AssociationUpdater {
         }
         LitePalLog.d(TAG, "remove columns from " + tableName + " >> " + removeColumns);
 		return removeColumns;
-	}
-
-	/**
+	}/**
 	 * It will check each class in the mapping list. Find their types for each
 	 * field is changed or not by comparing with the types in table columns. If
 	 * there's a column have same name as a field in class but with different
@@ -198,9 +158,7 @@ public class Upgrader extends AssociationUpdater {
             }
         }
 		return columnsToChangeType;
-	}
-
-	/**
+	}/**
 	 * Tell LitePal the column is need to remove or not. The column can be
 	 * remove only on the condition that the following three rules are all
 	 * passed. First the corresponding field for this column is removed in the
@@ -214,9 +172,7 @@ public class Upgrader extends AssociationUpdater {
 	private boolean isNeedToRemove(String columnName) {
 		return isRemovedFromClass(columnName) && !isIdColumn(columnName)
 				&& !isForeignKeyColumn(mTableModel, columnName);
-	}
-
-	/**
+	}/**
 	 * Read a column name from database, and judge the corresponding field in
 	 * class is removed or not.
 	 * 
@@ -226,9 +182,7 @@ public class Upgrader extends AssociationUpdater {
 	 */
 	private boolean isRemovedFromClass(String columnName) {
         return !mTableModel.containsColumn(columnName);
-	}
-
-	/**
+	}/**
 	 * Generate a SQL for add new column into the existing table.
 	 * 
 	 * @param columnModel
@@ -237,9 +191,7 @@ public class Upgrader extends AssociationUpdater {
 	 */
 	private String generateAddColumnSQL(ColumnModel columnModel) {
 		return generateAddColumnSQL(mTableModel.getTableName(), columnModel);
-	}
-
-	/**
+	}/**
 	 * This method create a SQL array for the all new columns to add them into
 	 * table.
 	 * 
@@ -253,9 +205,7 @@ public class Upgrader extends AssociationUpdater {
 			sqls.add(generateAddColumnSQL(columnModel));
 		}
 		return sqls;
-	}
-
-    /**
+	}/**
      * When some fields are removed from class, the table should synchronize the
      * changes by removing the corresponding columns.
      *
@@ -268,9 +218,7 @@ public class Upgrader extends AssociationUpdater {
         for (String columnName : removeColumnNames) {
             mTableModelDB.removeColumnModelByName(columnName);
         }
-    }
-
-	/**
+    }/**
 	 * When some fields are added into the class after last upgrade, the table
 	 * should synchronize the changes by adding the corresponding columns.
 	 * 
@@ -283,9 +231,7 @@ public class Upgrader extends AssociationUpdater {
         for (ColumnModel columnModel : columnModelList) {
             mTableModelDB.addColumnModel(columnModel);
         }
-	}
-
-	/**
+	}/**
 	 * When some fields type are changed in class, the table should drop the
 	 * before columns and create new columns with same name but new types.
 	 * 
@@ -302,9 +248,7 @@ public class Upgrader extends AssociationUpdater {
         }
 		removeColumns(columnNames);
 		addColumns(columnModelList);
-	}
-
-    /**
+	}/**
      * When fields annotation changed in class, table should change the corresponding constraints
      * make them sync to the fields annotation.
      */
@@ -313,9 +257,7 @@ public class Upgrader extends AssociationUpdater {
             LitePalLog.d(TAG, "do changeColumnsConstraints");
             execute(getChangeColumnsConstraintsSQL(), mDb);
         }
-    }
-
-    /**
+    }/**
      * This method create a SQL array for the whole changing column constraints job.
      * @return A SQL list contains create temporary table, create new table, add foreign keys,
      *         migrate data and drop temporary table.
@@ -338,9 +280,7 @@ public class Upgrader extends AssociationUpdater {
         }
         LitePalLog.d(TAG, "<< generateChangeConstraintSQL");
         return sqls;
-    }
-
-    /**
+    }/**
      * Generate a SQL List for adding foreign keys. Changing constraints job should remain all the
      * existing columns including foreign keys. This method add origin foreign keys after creating
      * table.
@@ -358,6 +298,4 @@ public class Upgrader extends AssociationUpdater {
             }
         }
         return addForeignKeySQLs;
-    }
-
-}
+    }}

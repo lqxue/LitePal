@@ -1,31 +1,7 @@
-/*
- * Copyright (C)  Tony Green, LitePal Framework Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.litepal.tablemanager;
-
-import com.litepal.tablemanager.model.TableModel;
+package com.litepal.tablemanager;import com.litepal.tablemanager.model.TableModel;
 import com.litepal.util.Const;
-import com.litepal.util.DBUtility;
-
-import android.database.sqlite.SQLiteDatabase;
-
-import java.util.ArrayList;
-import java.util.List;
-
-/**
+import com.litepal.util.DBUtility;import android.database.sqlite.SQLiteDatabase;import java.util.ArrayList;
+import java.util.List;/**
  * This is a subclass of Generator. Use to create tables. It will automatically
  * build a create table SQL based on the passing TableModel object. In case of
  * there's already a table with the same name in the database, LitePal will
@@ -37,9 +13,7 @@ import java.util.List;
  * @since 1.0
  */
 class Creator extends AssociationCreator {
-	public static final String TAG = "Creator";
-
-	/**
+	public static final String TAG = "Creator";/**
 	 * Analyzing the table model, create a table in the database based on the
 	 * table model's value.
 	 */
@@ -48,14 +22,10 @@ class Creator extends AssociationCreator {
 		for (TableModel tableModel : getAllTableModels()) {
 			createOrUpgradeTable(tableModel, db, force);
 		}
-	}
-
-    protected void createOrUpgradeTable(TableModel tableModel, SQLiteDatabase db, boolean force) {
+	}protected void createOrUpgradeTable(TableModel tableModel, SQLiteDatabase db, boolean force) {
         execute(getCreateTableSQLs(tableModel, db, force), db);
         giveTableSchemaACopy(tableModel.getTableName(), Const.TableSchema.NORMAL_TABLE, db);
-    }
-
-	/**
+    }/**
 	 * When creating a new table, it should always try to drop the same name
 	 * table if exists. This method create a SQL array for the whole create
 	 * table job.
@@ -82,9 +52,7 @@ class Creator extends AssociationCreator {
 			}
 		}
         return sqls;
-	}
-
-	/**
+	}/**
 	 * Generate a SQL for dropping table.
 	 * 
 	 * @param tableModel
@@ -93,9 +61,7 @@ class Creator extends AssociationCreator {
 	 */
     private String generateDropTableSQL(TableModel tableModel) {
 		return generateDropTableSQL(tableModel.getTableName());
-	}
-
-	/**
+	}/**
 	 * Generate a create table SQL by analyzing the TableModel. Note that it
 	 * will always generate a SQL with id/_id column in it as primary key, and
 	 * this id is auto increment as integer. Do not try to assign or modify it.
@@ -107,6 +73,4 @@ class Creator extends AssociationCreator {
 	 */
     String generateCreateTableSQL(TableModel tableModel) {
 		return generateCreateTableSQL(tableModel.getTableName(), tableModel.getColumnModels(), true);
-	}
-
-}
+	}}

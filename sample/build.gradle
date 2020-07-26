@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
 
     defaultConfig {
-        applicationId "org.litepal.litepalsample"
+        applicationId "com.litepal.litepalsample"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1

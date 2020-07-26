@@ -1,32 +1,8 @@
-/*
- * Copyright (C)  Tony Green, LitePal Framework Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.litepal.parser;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.litepal.exceptions.InvalidAttributesException;
+package com.litepal.parser;import java.util.ArrayList;
+import java.util.List;import com.litepal.exceptions.InvalidAttributesException;
 import com.litepal.util.BaseUtility;
 import com.litepal.util.Const;
-import com.litepal.util.SharedUtil;
-
-import android.text.TextUtils;
-
-/**
+import com.litepal.util.SharedUtil;import android.text.TextUtils;/**
  * The object model for the litepal.xml file. Once database connection happens,
  * LitePal will try to analysis the litepal.xml, and read all the attribute into
  * the LitePalAttr model for further usage.
@@ -34,51 +10,33 @@ import android.text.TextUtils;
  * @author Tony Green
  * @since 1.0
  */
-public final class LitePalAttr {
-
-	/**
+public final class LitePalAttr {/**
 	 * Static litePalAttr object.
 	 */
-	private static LitePalAttr litePalAttr;
-
-	/**
+	private static LitePalAttr litePalAttr;/**
 	 * The version of database.
 	 */
-	private int version;
-
-	/**
+	private int version;/**
 	 * The name of database.
 	 */
-	private String dbName;
-
-	/**
+	private String dbName;/**
 	 * The case of table names and column names and SQL.
 	 */
-	private String cases;
-
-    /**
+	private String cases;/**
      * Define where the .db file should be. Option values: internal, external, or path in sdcard.
      */
-    private String storage;
-
-	/**
+    private String storage;/**
 	 * All the model classes that want to map in the database. Each class should
 	 * be given the full name including package name.
 	 */
-	private List<String> classNames;
-
-    /**
+	private List<String> classNames;/**
      * Extra name as key for saving the database version in SharedUtil.
      */
-	private String extraKeyName;
-
-	/**
+	private String extraKeyName;/**
 	 * Do not allow new a LitePalAttr object. Makes it a singleton class.
 	 */
 	private LitePalAttr() {
-	}
-
-	/**
+	}/**
 	 * Provide a way to get the instance of LitePalAttr.
 	 * @return the singleton instance of LitePalAttr
 	 */
@@ -92,9 +50,7 @@ public final class LitePalAttr {
 			}
 		}
 		return litePalAttr;
-	}
-
-	private static void loadLitePalXMLConfiguration() {
+	}private static void loadLitePalXMLConfiguration() {
         if (BaseUtility.isLitePalXMLExists()) {
             LitePalConfig config = LitePalParser.parseLitePalConfiguration();
             litePalAttr.setDbName(config.getDbName());
@@ -103,48 +59,28 @@ public final class LitePalAttr {
             litePalAttr.setCases(config.getCases());
             litePalAttr.setStorage(config.getStorage());
         }
-    }
-
-	/**
+    }/**
 	 * Clear the instance of LitePalAttr.
 	 */
 	public static void clearInstance() {
 		litePalAttr = null;
-	}
-
-	public int getVersion() {
+	}public int getVersion() {
 		return version;
-	}
-
-	public void setVersion(int version) {
+	}public void setVersion(int version) {
 		this.version = version;
-	}
-
-	public String getDbName() {
+	}public String getDbName() {
 		return dbName;
-	}
-
-	public void setDbName(String dbName) {
+	}public void setDbName(String dbName) {
 		this.dbName = dbName;
-	}
-
-    public String getStorage() {
+	}public String getStorage() {
         return storage;
-    }
-
-	public void setStorage(String storage) {
+    }public void setStorage(String storage) {
         this.storage = storage;
-    }
-
-    public String getExtraKeyName() {
+    }public String getExtraKeyName() {
         return extraKeyName;
-    }
-
-    public void setExtraKeyName(String extraKeyName) {
+    }public void setExtraKeyName(String extraKeyName) {
         this.extraKeyName = extraKeyName;
-    }
-
-    /**
+    }/**
 	 * Get the class name list. Always add table_schema as a value.
 	 * 
 	 * @return The class name list.
@@ -157,9 +93,7 @@ public final class LitePalAttr {
 			classNames.add("Table_Schema");
 		}
 		return classNames;
-	}
-
-	/**
+	}/**
 	 * Add a class name into the current mapping model list.
 	 * 
 	 * @param className
@@ -167,21 +101,13 @@ public final class LitePalAttr {
 	 */
 	public void addClassName(String className) {
 		getClassNames().add(className);
-	}
-
-	public void setClassNames(List<String> classNames) {
+	}public void setClassNames(List<String> classNames) {
 		this.classNames = classNames;
-	}
-
-	public String getCases() {
+	}public String getCases() {
 		return cases;
-	}
-
-	public void setCases(String cases) {
+	}public void setCases(String cases) {
 		this.cases = cases;
-	}
-
-	/**
+	}/**
 	 * Before application build the connection with database, check the fields
 	 * in LitePalAttr. If all of the fields are passed, the connection will be
 	 * continued.If anyone of them doesn't pass, an exception will be thrown.
@@ -219,6 +145,4 @@ public final class LitePalAttr {
 						+ InvalidAttributesException.CASES_VALUE_IS_INVALID);
 			}
 		}
-	}
-
-}
+	}}

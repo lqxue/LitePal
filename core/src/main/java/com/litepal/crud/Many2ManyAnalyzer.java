@@ -1,43 +1,17 @@
-/*
- * Copyright (C)  Tony Green, LitePal Framework Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.litepal.crud;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
-
-import com.litepal.LitePalBase;
+package com.litepal.crud;import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;import com.litepal.LitePalBase;
 import com.litepal.crud.model.AssociationsInfo;
 import com.litepal.tablemanager.Connector;
 import com.litepal.util.BaseUtility;
-import com.litepal.util.DBUtility;
-
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-
-/**
+import com.litepal.util.DBUtility;import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;/**
  * Deals analysis work when comes to two models are associated with Many2Many
  * associations.
  * 
  * @author Tony Green
  * @since 1.1
  */
-public class Many2ManyAnalyzer extends AssociationsAnalyzer {
-
-	/**
+public class Many2ManyAnalyzer extends AssociationsAnalyzer {/**
 	 * Analyzing the AssociationInfo. It will help baseObj assign the necessary
 	 * values automatically. If the two associated models have bidirectional
 	 * associations in class files but developer has only build unidirectional
@@ -74,9 +48,7 @@ public class Many2ManyAnalyzer extends AssociationsAnalyzer {
 				dealAssociatedModel(baseObj, associatedModel);
 			}
 		}
-	}
-
-	/**
+	}/**
 	 * This add an empty set for {@link LitePalSupport#associatedModelsMapForJoinTable}.
      * Might use for updating intermediate join table.
 	 * 
@@ -87,9 +59,7 @@ public class Many2ManyAnalyzer extends AssociationsAnalyzer {
 	 */
 	private void declareAssociations(LitePalSupport baseObj, AssociationsInfo associationInfo) {
 		baseObj.addEmptyModelForJoinTable(getAssociatedTableName(associationInfo));
-	}
-
-	/**
+	}/**
 	 * Force to build bidirectional associations for the associated model. If it
 	 * has already built, ignoring the rest process.
 	 * 
@@ -104,9 +74,7 @@ public class Many2ManyAnalyzer extends AssociationsAnalyzer {
 		if (!associatedModelCollection.contains(baseObj)) {
 			associatedModelCollection.add(baseObj);
 		}
-	}
-
-	/**
+	}/**
 	 * First of all the associated model need to be saved already, or nothing
 	 * will be executed below. Then add the id of associated model into
 	 * {@link LitePalSupport#associatedModelsMapForJoinTable} for
@@ -122,9 +90,7 @@ public class Many2ManyAnalyzer extends AssociationsAnalyzer {
 			baseObj.addAssociatedModelForJoinTable(associatedModel.getTableName(),
 					associatedModel.getBaseObjId());
 		}
-	}
-
-	/**
+	}/**
 	 * Get the associated table name by {@link AssociationsInfo} after case
 	 * changed.
 	 * 
@@ -135,9 +101,7 @@ public class Many2ManyAnalyzer extends AssociationsAnalyzer {
 	private String getAssociatedTableName(AssociationsInfo associationInfo) {
 		return BaseUtility.changeCase(DBUtility.getTableNameByClassName(associationInfo
 				.getAssociatedClassName()));
-	}
-
-	/**
+	}/**
 	 * Build the selection for querying the data in table. Column names are the
 	 * table names with _id as suffix.
 	 * 
@@ -154,9 +118,7 @@ public class Many2ManyAnalyzer extends AssociationsAnalyzer {
 		where.append(getForeignKeyColumnName(associatedModel.getTableName()));
 		where.append(" = ?");
 		return where.toString();
-	}
-
-	/**
+	}/**
 	 * Build the selection arguments to fill selection clause.
 	 * 
 	 * @param baseObj
@@ -169,9 +131,7 @@ public class Many2ManyAnalyzer extends AssociationsAnalyzer {
 	private String[] getSelectionArgs(LitePalSupport baseObj, LitePalSupport associatedModel) {
 		return new String[] { String.valueOf(baseObj.getBaseObjId()),
 				String.valueOf(associatedModel.getBaseObjId()) };
-	}
-
-	/**
+	}/**
 	 * Get the intermediate join table name for self model and associated model.
 	 * 
 	 * @param baseObj
@@ -182,6 +142,4 @@ public class Many2ManyAnalyzer extends AssociationsAnalyzer {
 	 */
 	private String getJoinTableName(LitePalSupport baseObj, LitePalSupport associatedModel) {
 		return getIntermediateTableName(baseObj, associatedModel.getTableName());
-	}
-
-}
+	}}

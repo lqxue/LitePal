@@ -7,22 +7,16 @@ gradle.properties
 /build
 bin
 tmp
-gen
-
-#################
+gen#################
 ## #IntelliJ IDEA
 #################
 .idea
 *.iml
 *.ipr
 *.iws
-out
-
-#################
+out#################
 ## Eclipse
-#################
-
-*.pydevproject
+#################*.pydevproject
 .metadata
 *.tmp
 *.bak
@@ -33,6 +27,4 @@ local.properties
 .loadpath
 *.classpath
 *.project
-README.md~
-
-/releaseToBintray.txt
+README.md~/releaseToBintray.txt

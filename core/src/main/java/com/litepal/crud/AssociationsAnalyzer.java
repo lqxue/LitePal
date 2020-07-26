@@ -1,42 +1,16 @@
-/*
- * Copyright (C)  Tony Green, LitePal Framework Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.litepal.crud;
-
-import com.litepal.exceptions.LitePalSupportException;
-
-import java.lang.reflect.Field;
+package com.litepal.crud;import com.litepal.exceptions.LitePalSupportException;import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-
-import com.litepal.LitePalBase;
+import java.util.HashSet;import com.litepal.LitePalBase;
 import com.litepal.crud.model.AssociationsInfo;
-import com.litepal.util.DBUtility;
-
-/**
+import com.litepal.util.DBUtility;/**
  * Base class of associations analyzer.
  * 
  * @author Tony Green
  * @since 1.1
  */
-abstract class AssociationsAnalyzer extends DataHandler {
-
-	/**
+abstract class AssociationsAnalyzer extends DataHandler {/**
 	 * Get the associated models collection of associated model. Used for
 	 * reverse searching associations.
 	 * 
@@ -58,9 +32,7 @@ abstract class AssociationsAnalyzer extends DataHandler {
 			NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		return (Collection<LitePalSupport>) getFieldValue(associatedModel,
 				associationInfo.getAssociateSelfFromOtherModel());
-	}
-
-	/**
+	}/**
 	 * Set the associated models collection of associated model. Break quote of
 	 * source collection.
 	 * 
@@ -83,9 +55,7 @@ abstract class AssociationsAnalyzer extends DataHandler {
 			IllegalAccessException, InvocationTargetException {
 		setFieldValue(associatedModel, associationInfo.getAssociateSelfFromOtherModel(),
 				associatedModelCollection);
-	}
-
-	/**
+	}/**
 	 * Check the associated model collection. If the associated model collection
 	 * is null, try to initialize the associated model collection by the given
 	 * associated field. If the associated field is subclass of List, make an
@@ -115,9 +85,7 @@ abstract class AssociationsAnalyzer extends DataHandler {
 			collection.addAll(associatedModelCollection);
 		}
 		return collection;
-	}
-
-	/**
+	}/**
 	 * Build the bidirectional association by setting the baseObj instance to
 	 * the associated model.
 	 * 
@@ -138,9 +106,7 @@ abstract class AssociationsAnalyzer extends DataHandler {
 			NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		setFieldValue(associatedModel, associationInfo.getAssociateSelfFromOtherModel(),
 				baseObj);
-	}
-
-	/**
+	}/**
 	 * If the associated model is saved, add its' name and id to baseObj by
 	 * calling {@link LitePalSupport#addAssociatedModelWithFK(String, long)}. Or if
 	 * the baseObj is saved, add its' name and id to associated model by calling
@@ -164,9 +130,7 @@ abstract class AssociationsAnalyzer extends DataHandler {
 				}
 			}
 		}
-	}
-
-	/**
+	}/**
 	 * If the associated model of self model is null, the FK value in database
 	 * should be cleared if it exists when updating.
 	 * 
@@ -178,9 +142,7 @@ abstract class AssociationsAnalyzer extends DataHandler {
 	 */
 	protected void mightClearFKValue(LitePalSupport baseObj, AssociationsInfo associationInfo) {
 		baseObj.addFKNameToClearSelf(getForeignKeyName(associationInfo));
-	}
-
-	/**
+	}/**
 	 * Get foreign key name by {@link AssociationsInfo}.
 	 * 
 	 * @param associationInfo

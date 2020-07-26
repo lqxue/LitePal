@@ -1,30 +1,8 @@
-/*
- * Copyright (C)  Tony Green, LitePal Framework Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.litepal;
-
-import com.litepal.exceptions.GlobalException;
-
-import android.annotation.SuppressLint;
+package com.litepal;import com.litepal.exceptions.GlobalException;import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
-import android.os.Looper;
-
-/**
+import android.os.Looper;/**
  * Base class of LitePal to make things easier when developers need to use
  * context. When you need context, just use
  * <b>LitePalApplication.getContext()</b>. To make this function work, you need
@@ -42,24 +20,16 @@ import android.os.Looper;
  * @author Tony Green
  * @since 1.0
  */
-public class LitePalApplication extends Application {
-
-	/**
+public class LitePalApplication extends Application {/**
 	 * Global application context.
 	 */
 	@SuppressLint("StaticFieldLeak")
-	public static Context sContext;
-
-	public static Handler sHandler = new Handler(Looper.getMainLooper());
-
-	/**
+	public static Context sContext;public static Handler sHandler = new Handler(Looper.getMainLooper());/**
 	 * Construct of LitePalApplication. Initialize application context.
 	 */
 	public LitePalApplication() {
 		sContext = this;
-	}
-
-	/**
+	}/**
 	 * Get the global application context.
 	 * 
 	 * @return Application context.
@@ -70,6 +40,4 @@ public class LitePalApplication extends Application {
 			throw new GlobalException(GlobalException.APPLICATION_CONTEXT_IS_NULL);
 		}
 		return sContext;
-	}
-
-}
+	}}

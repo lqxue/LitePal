@@ -1,30 +1,10 @@
-/*
- * Copyright (C)  Tony Green, LitePal Framework Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.litepal;
-
-import android.content.ContentValues;
+package com.litepal;import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.TextUtils;
-
-import com.litepal.crud.LitePalSupport;
+import android.text.TextUtils;import com.litepal.crud.LitePalSupport;
 import com.litepal.crud.QueryHandler;
 import com.litepal.crud.SaveHandler;
 import com.litepal.crud.UpdateHandler;
@@ -38,13 +18,9 @@ import com.litepal.util.BaseUtility;
 import com.litepal.util.Const;
 import com.litepal.util.DBUtility;
 import com.litepal.util.SharedUtil;
-import com.litepal.util.cipher.CipherUtil;
-
-import java.io.File;
+import com.litepal.util.cipher.CipherUtil;import java.io.File;
 import java.util.Collection;
-import java.util.List;
-
-/**
+import java.util.List;/**
  * LitePal is an Android library that allows developers to use SQLite database extremely easy.
  * You can initialized it by calling {@link #initialize(Context)} method to make LitePal ready to
  * work. Also you can switch the using database by calling {@link #use(LitePalDB)} and {@link #useDefault()}
@@ -53,21 +29,13 @@ import java.util.List;
  * @author Tony Green
  * @since 2.1
  */
-public class Operator {
-
-    private static Handler handler = new Handler(Looper.getMainLooper());
-
-    private static DatabaseListener dbListener = null;
-
-    /**
+public class Operator {private static Handler handler = new Handler(Looper.getMainLooper());private static DatabaseListener dbListener = null;/**
      * Get the main thread handler. You don't need this method. It's used by framework only.
      * @return Main thread handler.
      */
     public static Handler getHandler() {
         return handler;
-    }
-
-    /**
+    }/**
      * Initialize to make LitePal ready to work. If you didn't configure LitePalApplication
      * in the AndroidManifest.xml, make sure you call this method as soon as possible. In
      * Application's onCreate() method will be fine.
@@ -77,41 +45,31 @@ public class Operator {
      */
     public static void initialize(Context context) {
         LitePalApplication.sContext = context;
-    }
-
-    /**
+    }/**
      * Get a writable SQLiteDatabase.
      *
      * @return A writable SQLiteDatabase instance
      */
     public static SQLiteDatabase getDatabase() {
         return Connector.getDatabase();
-    }
-
-    /**
+    }/**
      * Begins a transaction in EXCLUSIVE mode.
      */
     public static void beginTransaction() {
         getDatabase().beginTransaction();
-    }
-
-    /**
+    }/**
      * End a transaction.
      */
     public static void endTransaction() {
         getDatabase().endTransaction();
-    }
-
-    /**
+    }/**
      * Marks the current transaction as successful. Do not do any more database work between calling this and calling endTransaction.
      * Do as little non-database work as possible in that situation too.
      * If any errors are encountered between this and endTransaction the transaction will still be committed.
      */
     public static void setTransactionSuccessful() {
         getDatabase().setTransactionSuccessful();
-    }
-
-    /**
+    }/**
      * Switch the using database to the one specified by parameter.
      * @param litePalDB
      *          The database to switch to.
@@ -130,9 +88,7 @@ public class Operator {
             }
             Connector.clearLitePalOpenHelperInstance();
         }
-    }
-
-    /**
+    }/**
      * Switch the using database to default with configuration by litepal.xml.
      */
     public static void useDefault() {
@@ -140,9 +96,7 @@ public class Operator {
             LitePalAttr.clearInstance();
             Connector.clearLitePalOpenHelperInstance();
         }
-    }
-
-    /**
+    }/**
      * Delete the specified database.
      * @param dbName
      *          Name of database to delete.
@@ -174,13 +128,9 @@ public class Operator {
             }
             return false;
         }
-    }
-
-    public static void aesKey(String key) {
+    }public static void aesKey(String key) {
         CipherUtil.aesKey = key;
-    }
-
-    /**
+    }/**
      * Remove the database version in SharedPreferences file.
      * @param dbName
      *          Name of database to delete.
@@ -191,9 +141,7 @@ public class Operator {
         } else {
             SharedUtil.removeVersion(dbName);
         }
-    }
-
-    /**
+    }/**
      * Check the dbName is default database or not. If it's same as dbName in litepal.xml, then it is
      * default database.
      * @param dbName
@@ -213,9 +161,7 @@ public class Operator {
             return dbName.equalsIgnoreCase(defaultDbName);
         }
         return false;
-    }
-
-    /**
+    }/**
      * Declaring to query which columns in table.
      *
      * <pre>
@@ -234,9 +180,7 @@ public class Operator {
         FluentQuery cQuery = new FluentQuery();
         cQuery.mColumns = columns;
         return cQuery;
-    }
-
-    /**
+    }/**
      * Declaring to query which rows in table.
      *
      * <pre>
@@ -255,9 +199,7 @@ public class Operator {
         FluentQuery cQuery = new FluentQuery();
         cQuery.mConditions = conditions;
         return cQuery;
-    }
-
-    /**
+    }/**
      * Declaring how to order the rows queried from table.
      *
      * <pre>
@@ -277,9 +219,7 @@ public class Operator {
         FluentQuery cQuery = new FluentQuery();
         cQuery.mOrderBy = column;
         return cQuery;
-    }
-
-    /**
+    }/**
      * Limits the number of rows returned by the query.
      *
      * <pre>
@@ -297,9 +237,7 @@ public class Operator {
         FluentQuery cQuery = new FluentQuery();
         cQuery.mLimit = String.valueOf(value);
         return cQuery;
-    }
-
-    /**
+    }/**
      * Declaring the offset of rows returned by the query. This method must be
      * used with {@link #limit(int)}, or nothing will return.
      *
@@ -317,9 +255,7 @@ public class Operator {
         FluentQuery cQuery = new FluentQuery();
         cQuery.mOffset = String.valueOf(value);
         return cQuery;
-    }
-
-    /**
+    }/**
      * Count the records.
      *
      * <pre>
@@ -339,9 +275,7 @@ public class Operator {
      */
     public static int count(Class<?> modelClass) {
         return count(BaseUtility.changeCase(DBUtility.getTableNameByClassName(modelClass.getName())));
-    }
-
-    /**
+    }/**
      * Count the records.
      *
      * <pre>
@@ -364,9 +298,7 @@ public class Operator {
             FluentQuery cQuery = new FluentQuery();
             return cQuery.count(tableName);
         }
-    }
-
-    /**
+    }/**
      * Calculates the average value on a given column.
      *
      * <pre>
@@ -387,9 +319,7 @@ public class Operator {
      */
     public static double average(Class<?> modelClass, String column) {
         return average(BaseUtility.changeCase(DBUtility.getTableNameByClassName(modelClass.getName())), column);
-    }
-
-    /**
+    }/**
      * Calculates the average value on a given column.
      *
      * <pre>
@@ -413,9 +343,7 @@ public class Operator {
             FluentQuery cQuery = new FluentQuery();
             return cQuery.average(tableName, column);
         }
-    }
-
-    /**
+    }/**
      * Calculates the maximum value on a given column. The value is returned
      * with the same data type of the column.
      *
@@ -439,9 +367,7 @@ public class Operator {
      */
     public static <T> T max(Class<?> modelClass, String columnName, Class<T> columnType) {
         return max(BaseUtility.changeCase(DBUtility.getTableNameByClassName(modelClass.getName())), columnName, columnType);
-    }
-
-    /**
+    }/**
      * Calculates the maximum value on a given column. The value is returned
      * with the same data type of the column.
      *
@@ -468,9 +394,7 @@ public class Operator {
             FluentQuery cQuery = new FluentQuery();
             return cQuery.max(tableName, columnName, columnType);
         }
-    }
-
-    /**
+    }/**
      * Calculates the minimum value on a given column. The value is returned
      * with the same data type of the column.
      *
@@ -494,9 +418,7 @@ public class Operator {
      */
     public static <T> T min(Class<?> modelClass, String columnName, Class<T> columnType) {
         return min(BaseUtility.changeCase(DBUtility.getTableNameByClassName(modelClass.getName())), columnName, columnType);
-    }
-
-    /**
+    }/**
      * Calculates the minimum value on a given column. The value is returned
      * with the same data type of the column.
      *
@@ -523,9 +445,7 @@ public class Operator {
             FluentQuery cQuery = new FluentQuery();
             return cQuery.min(tableName, columnName, columnType);
         }
-    }
-
-    /**
+    }/**
      * Calculates the sum of values on a given column. The value is returned
      * with the same data type of the column.
      *
@@ -549,9 +469,7 @@ public class Operator {
      */
     public static <T> T sum(Class<?> modelClass, String columnName, Class<T> columnType) {
         return sum(BaseUtility.changeCase(DBUtility.getTableNameByClassName(modelClass.getName())), columnName, columnType);
-    }
-
-    /**
+    }/**
      * Calculates the sum of values on a given column. The value is returned
      * with the same data type of the column.
      *
@@ -578,9 +496,7 @@ public class Operator {
             FluentQuery cQuery = new FluentQuery();
             return cQuery.sum(tableName, columnName, columnType);
         }
-    }
-
-    /**
+    }/**
      * Finds the record by a specific id.
      *
      * <pre>
@@ -602,9 +518,7 @@ public class Operator {
      */
     public static <T> T find(Class<T> modelClass, long id) {
         return find(modelClass, id, false);
-    }
-
-    /**
+    }/**
      * It is mostly same as {@link Operator#find(Class, long)} but an isEager
      * parameter. If set true the associated models will be loaded as well.
      * <br>
@@ -624,9 +538,7 @@ public class Operator {
             QueryHandler queryHandler = new QueryHandler(Connector.getDatabase());
             return queryHandler.onFind(modelClass, id, isEager);
         }
-    }
-
-    /**
+    }/**
      * Finds the first record of a single table.
      *
      * <pre>
@@ -643,9 +555,7 @@ public class Operator {
      */
     public static <T> T findFirst(Class<T> modelClass) {
         return findFirst(modelClass, false);
-    }
-
-    /**
+    }/**
      * It is mostly same as {@link Operator#findFirst(Class)} but an isEager
      * parameter. If set true the associated models will be loaded as well.
      * <br>
@@ -663,9 +573,7 @@ public class Operator {
             QueryHandler queryHandler = new QueryHandler(Connector.getDatabase());
             return queryHandler.onFindFirst(modelClass, isEager);
         }
-    }
-
-    /**
+    }/**
      * Finds the last record of a single table.
      *
      * <pre>
@@ -682,9 +590,7 @@ public class Operator {
      */
     public static <T> T findLast(Class<T> modelClass) {
         return findLast(modelClass, false);
-    }
-
-    /**
+    }/**
      * It is mostly same as {@link Operator#findLast(Class)} but an isEager
      * parameter. If set true the associated models will be loaded as well.
      * <br>
@@ -702,9 +608,7 @@ public class Operator {
             QueryHandler queryHandler = new QueryHandler(Connector.getDatabase());
             return queryHandler.onFindLast(modelClass, isEager);
         }
-    }
-
-    /**
+    }/**
      * Finds multiple records by an id array.
      *
      * <pre>
@@ -736,9 +640,7 @@ public class Operator {
      */
     public static <T> List<T> findAll(Class<T> modelClass, long... ids) {
         return findAll(modelClass, false, ids);
-    }
-
-    /**
+    }/**
      * It is mostly same as {@link Operator#findAll(Class, long...)} but an
      * isEager parameter. If set true the associated models will be loaded as well.
      * <br>
@@ -759,9 +661,7 @@ public class Operator {
             QueryHandler queryHandler = new QueryHandler(Connector.getDatabase());
             return queryHandler.onFindAll(modelClass, isEager, ids);
         }
-    }
-
-    /**
+    }/**
      * Runs the provided SQL and returns a Cursor over the result set. You may
      * include ? in where clause in the query, which will be replaced by the
      * second to the last parameters, such as:
@@ -795,9 +695,7 @@ public class Operator {
             }
             return Connector.getDatabase().rawQuery(sql[0], selectionArgs);
         }
-    }
-
-    /**
+    }/**
      * Deletes the record in the database by id.<br>
      * The data in other tables which is referenced with the record will be
      * removed too.
@@ -828,9 +726,7 @@ public class Operator {
                 db.endTransaction();
             }
         }
-    }
-
-    /**
+    }/**
      * Deletes all records with details given if they match a set of conditions
      * supplied. This method constructs a single SQL DELETE statement and sends
      * it to the database.
@@ -868,9 +764,7 @@ public class Operator {
                 db.endTransaction();
             }
         }
-    }
-
-    /**
+    }/**
      * Deletes all records with details given if they match a set of conditions
      * supplied. This method constructs a single SQL DELETE statement and sends
      * it to the database.
@@ -902,9 +796,7 @@ public class Operator {
             DeleteHandler deleteHandler = new DeleteHandler(Connector.getDatabase());
             return deleteHandler.onDeleteAll(tableName, conditions);
         }
-    }
-
-    /**
+    }/**
      * Updates the corresponding record by id with ContentValues. Returns the
      * number of affected rows.
      *
@@ -930,9 +822,7 @@ public class Operator {
             UpdateHandler updateHandler = new UpdateHandler(Connector.getDatabase());
             return updateHandler.onUpdate(modelClass, id, values);
         }
-    }
-
-    /**
+    }/**
      * Updates all records with details given if they match a set of conditions
      * supplied. This method constructs a single SQL UPDATE statement and sends
      * it to the database.
@@ -965,9 +855,7 @@ public class Operator {
                                 String... conditions) {
         return updateAll(BaseUtility.changeCase(DBUtility.getTableNameByClassName(
                 modelClass.getName())), values, conditions);
-    }
-
-    /**
+    }/**
      * Updates all records with details given if they match a set of conditions
      * supplied. This method constructs a single SQL UPDATE statement and sends
      * it to the database.
@@ -1002,9 +890,7 @@ public class Operator {
             UpdateHandler updateHandler = new UpdateHandler(Connector.getDatabase());
             return updateHandler.onUpdateAll(tableName, values, conditions);
         }
-    }
-
-    /**
+    }/**
      * Saves the collection into database. <br>
      *
      * <pre>
@@ -1046,9 +932,7 @@ public class Operator {
                 db.endTransaction();
             }
         }
-    }
-
-    /**
+    }/**
      * Provide a way to mark all models in collection as deleted. This means these models' save
      * state is no longer exist anymore. If save them again, they will be treated as inserting new
      * data instead of updating the exist one.
@@ -1059,9 +943,7 @@ public class Operator {
         for (T t : collection) {
             t.clearSavedState();
         }
-    }
-
-    /**
+    }/**
      * Check if the specified conditions data already exists in the table.
      * @param modelClass
      *          Which table to check by class.
@@ -1073,17 +955,11 @@ public class Operator {
      */
     public static <T> boolean isExist(Class<T> modelClass, String... conditions) {
         return conditions != null && where(conditions).count(modelClass) > 0;
-    }
-
-    /**
+    }/**
      * Register a listener to listen database create and upgrade events.
      */
     public static void registerDatabaseListener(DatabaseListener listener) {
         dbListener = listener;
-    }
-
-    public static DatabaseListener getDBListener() {
+    }public static DatabaseListener getDBListener() {
         return dbListener;
-    }
-
-}
+    }}

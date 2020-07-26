@@ -1,37 +1,13 @@
-/*
- * Copyright (C)  Tony Green, LitePal Framework Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.litepal.crud;
-
-import android.database.sqlite.SQLiteDatabase;
-
-import com.litepal.exceptions.LitePalSupportException;
+package com.litepal.crud;import android.database.sqlite.SQLiteDatabase;import com.litepal.exceptions.LitePalSupportException;
 import com.litepal.tablemanager.Connector;
 import com.litepal.Operator;
 import com.litepal.util.BaseUtility;
-import com.litepal.util.DBUtility;
-
-import java.util.ArrayList;
+import com.litepal.util.DBUtility;import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-/**
+import java.util.Set;/**
  * LitePalSupport connects classes to SQLite database tables to establish an almost
  * zero-configuration persistence layer for applications. In the context of an
  * application, these classes are commonly referred to as models. Models can
@@ -61,66 +37,46 @@ import java.util.Set;
  * @author Tony Green
  * @since 2.0
  */
-public class LitePalSupport {
-
-    /**
+public class LitePalSupport {/**
      * Constant for MD5 encryption.
      */
-    protected static final String MD5 = "MD5";
-
-    /**
+    protected static final String MD5 = "MD5";/**
      * Constant for AES encryption.
      */
-    protected static final String AES = "AES";
-
-	/**
+    protected static final String AES = "AES";/**
 	 * The identify of each model. LitePal will generate the value
 	 * automatically. Do not try to assign or modify it.
 	 */
-	long baseObjId;
-
-	/**
+	long baseObjId;/**
 	 * A map contains all the associated models' id with M2O or O2O
 	 * associations. Each corresponding table of these models contains a foreign
 	 * key column.
 	 */
-    private Map<String, Set<Long>> associatedModelsMapWithFK;
-
-	/**
+    private Map<String, Set<Long>> associatedModelsMapWithFK;/**
 	 * A map contains all the associated models' id with M2O or O2O association.
 	 * Each corresponding table of these models doesn't contain foreign key
 	 * column. Instead self model has a foreign key column in the corresponding
 	 * table.
 	 */
-    private Map<String, Long> associatedModelsMapWithoutFK;
-
-	/**
+    private Map<String, Long> associatedModelsMapWithoutFK;/**
 	 * A map contains all the associated models' id with M2M association.
 	 */
-	Map<String, List<Long>> associatedModelsMapForJoinTable;
-
-	/**
+	Map<String, List<Long>> associatedModelsMapForJoinTable;/**
 	 * When updating a model and the associations breaks between current model
 	 * and others, if current model holds a foreign key, it need to be cleared.
 	 * This list holds all the foreign key names that need to clear.
 	 */
-    private List<String> listToClearSelfFK;
-
-	/**
+    private List<String> listToClearSelfFK;/**
 	 * When updating a model and the associations breaks between current model
 	 * and others, clear all the associated models' foreign key value if it
 	 * exists. This list holds all the associated table names that need to
 	 * clear.
 	 */
-    private List<String> listToClearAssociatedFK;
-
-	/**
+    private List<String> listToClearAssociatedFK;/**
 	 * A list holds all the field names which need to be updated into default
 	 * value of model.
 	 */
-    private List<String> fieldsToSetToDefault;
-
-	/**
+    private List<String> fieldsToSetToDefault;/**
 	 * Deletes the record in the database. The record must be saved already.<br>
 	 * The data in other tables which is referenced with the record will be
 	 * removed too.
@@ -149,9 +105,7 @@ public class LitePalSupport {
                 db.endTransaction();
             }
         }
-	}
-
-	/**
+	}/**
 	 * Updates the corresponding record by id. Use setXxx to decide which
 	 * columns to update.
 	 * 
@@ -188,9 +142,7 @@ public class LitePalSupport {
                 db.endTransaction();
             }
         }
-	}
-
-	/**
+	}/**
 	 * Updates all records with details given if they match a set of conditions
 	 * supplied. This method constructs a single SQL UPDATE statement and sends
 	 * it to the database.
@@ -235,9 +187,7 @@ public class LitePalSupport {
                 db.endTransaction();
             }
         }
-	}
-
-	/**
+	}/**
 	 * Saves the model. <br>
 	 * 
 	 * <pre>
@@ -269,9 +219,7 @@ public class LitePalSupport {
             e.printStackTrace();
             return false;
         }
-	}
-
-    /**
+	}/**
 	 * Saves the model. <br>
 	 * 
 	 * <pre>
@@ -310,9 +258,7 @@ public class LitePalSupport {
                 db.endTransaction();
             }
         }
-	}
-
-    /**
+	}/**
      * Save the model if the conditions data not exist, or update the matching models if the conditions data exist. <br>
      *
      * <pre>
@@ -372,25 +318,19 @@ public class LitePalSupport {
                 }
             }
         }
-    }
-
-	/**
+    }/**
 	 * Current model is saved or not.
 	 * 
 	 * @return If saved return true, or return false.
 	 */
 	public boolean isSaved() {
 		return baseObjId > 0;
-	}
-
-    /**
+	}/**
      * It model is saved, clear the saved state and model becomes unsaved. Otherwise nothing will happen.
      */
     public void clearSavedState() {
         baseObjId = 0;
-    }
-
-	/**
+    }/**
 	 * When updating database with {@link LitePalSupport#update(long)}, you must
 	 * use this method to update a field into default value. Use setXxx with
 	 * default value of the model won't update anything. <br>
@@ -400,9 +340,7 @@ public class LitePalSupport {
 	 */
 	public void setToDefault(String fieldName) {
 		getFieldsToSetToDefault().add(fieldName);
-	}
-
-    /**
+	}/**
      * Assigns value to baseObjId. This will override the original value. <b>Never call this method
      * unless you know exactly what you are doing.</b>
      * @param baseObjId
@@ -410,16 +348,12 @@ public class LitePalSupport {
      */
     public void assignBaseObjId(long baseObjId) {
         this.baseObjId = baseObjId;
-    }
-
-	/**
+    }/**
 	 * Disable developers to create instance of LitePalSupport directly. They
 	 * should inherit this class with subclasses and operate on them.
 	 */
 	protected LitePalSupport() {
-	}
-
-	/**
+	}/**
 	 * Get the baseObjId of this model if it's useful for developers. It's for
 	 * system use usually. Do not try to assign or modify it.
 	 * 
@@ -427,27 +361,21 @@ public class LitePalSupport {
 	 */
 	protected long getBaseObjId() {
 		return baseObjId;
-	}
-	
-	/**
+	}/**
 	 * Get the full class name of self.
 	 * 
 	 * @return The full class name of self.
 	 */
 	protected String getClassName() {
 		return getClass().getName();
-	}
-
-	/**
+	}/**
 	 * Get the corresponding table name of current model.
 	 * 
 	 * @return The corresponding table name of current model.
 	 */
 	protected String getTableName() {
 		return BaseUtility.changeCase(DBUtility.getTableNameByClassName(getClassName()));
-	}
-
-	/**
+	}/**
 	 * Get the list which holds all field names to update them into default
 	 * value of model in database.
 	 * 
@@ -459,9 +387,7 @@ public class LitePalSupport {
 			fieldsToSetToDefault = new ArrayList<String>();
 		}
 		return fieldsToSetToDefault;
-	}
-
-	/**
+	}/**
 	 * Add the id of an associated model into self model's associatedIdsWithFK
 	 * map. The associated model has a foreign key column in the corresponding
 	 * table.
@@ -480,9 +406,7 @@ public class LitePalSupport {
 		} else {
 			associatedIdsWithFKSet.add(associatedId);
 		}
-	}
-
-	/**
+	}/**
 	 * Get the associated model's map of self model. It can be used for
 	 * associations actions of CRUD. The key is the name of associated model.
 	 * The value is a List of id of associated models.
@@ -495,9 +419,7 @@ public class LitePalSupport {
 			associatedModelsMapWithFK = new HashMap<String, Set<Long>>();
 		}
 		return associatedModelsMapWithFK;
-	}
-
-	/**
+	}/**
 	 * Add the id of an associated model into self model's associatedIdsM2M map.
 	 * 
 	 * @param associatedModelName
@@ -515,9 +437,7 @@ public class LitePalSupport {
 		} else {
 			associatedIdsM2MSet.add(associatedId);
 		}
-	}
-
-	/**
+	}/**
 	 * Add an empty Set into {@link #associatedModelsMapForJoinTable} with
 	 * associated model name as key. Might be useful when comes to update
 	 * intermediate join table.
@@ -532,9 +452,7 @@ public class LitePalSupport {
 			associatedIdsM2MSet = new ArrayList<Long>();
 			associatedModelsMapForJoinTable.put(associatedModelName, associatedIdsM2MSet);
 		}
-	}
-
-	/**
+	}/**
 	 * Get the associated model's map for intermediate join table. It is used to
 	 * save values into intermediate join table. The key is the name of
 	 * associated model. The value is the id of associated model.
@@ -547,9 +465,7 @@ public class LitePalSupport {
 			associatedModelsMapForJoinTable = new HashMap<String, List<Long>>();
 		}
 		return associatedModelsMapForJoinTable;
-	}
-
-	/**
+	}/**
 	 * Add the id of an associated model into self model's association
 	 * collection. The associated model doesn't have a foreign key column in the
 	 * corresponding table. Instead self model has a foreign key column in the
@@ -562,9 +478,7 @@ public class LitePalSupport {
 	 */
 	void addAssociatedModelWithoutFK(String associatedTableName, long associatedId) {
 		getAssociatedModelsMapWithoutFK().put(associatedTableName, associatedId);
-	}
-
-	/**
+	}/**
 	 * Get the associated model's map of self model. It can be used for
 	 * associations actions of CRUD. The key is the name of associated model's
 	 * table. The value is the id of associated model.
@@ -576,9 +490,7 @@ public class LitePalSupport {
 			associatedModelsMapWithoutFK = new HashMap<String, Long>();
 		}
 		return associatedModelsMapWithoutFK;
-	}
-
-	/**
+	}/**
 	 * Add a foreign key name into the clear list.
 	 * 
 	 * @param foreignKeyName
@@ -589,9 +501,7 @@ public class LitePalSupport {
 		if (!list.contains(foreignKeyName)) {
 			list.add(foreignKeyName);
 		}
-	}
-
-	/**
+	}/**
 	 * Get the foreign key name list to clear foreign key value in current
 	 * model's table.
 	 * 
@@ -602,9 +512,7 @@ public class LitePalSupport {
 			listToClearSelfFK = new ArrayList<String>();
 		}
 		return listToClearSelfFK;
-	}
-
-	/**
+	}/**
 	 * Add an associated table name into the list to clear.
 	 * 
 	 * @param associatedTableName
@@ -615,9 +523,7 @@ public class LitePalSupport {
 		if (!list.contains(associatedTableName)) {
 			list.add(associatedTableName);
 		}
-	}
-
-	/**
+	}/**
 	 * Get the associated table names list which need to clear their foreign key
 	 * values.
 	 * 
@@ -628,9 +534,7 @@ public class LitePalSupport {
 			listToClearAssociatedFK = new ArrayList<String>();
 		}
 		return listToClearAssociatedFK;
-	}
-
-	/**
+	}/**
 	 * Clear all the data for storing associated models' data.
 	 */
 	void clearAssociatedData() {
@@ -638,9 +542,7 @@ public class LitePalSupport {
 		clearIdOfModelWithoutFK();
 		clearIdOfModelForJoinTable();
 		clearFKNameList();
-	}
-
-	/**
+	}/**
 	 * Clear all the data in {@link #associatedModelsMapWithFK}.
 	 */
 	private void clearIdOfModelWithFK() {
@@ -648,16 +550,12 @@ public class LitePalSupport {
 			associatedModelsMapWithFK.get(associatedModelName).clear();
 		}
 		associatedModelsMapWithFK.clear();
-	}
-
-	/**
+	}/**
 	 * Clear all the data in {@link #associatedModelsMapWithoutFK}.
 	 */
 	private void clearIdOfModelWithoutFK() {
 		getAssociatedModelsMapWithoutFK().clear();
-	}
-
-	/**
+	}/**
 	 * Clear all the data in {@link #associatedModelsMapForJoinTable}.
 	 */
 	private void clearIdOfModelForJoinTable() {
@@ -665,14 +563,10 @@ public class LitePalSupport {
 			associatedModelsMapForJoinTable.get(associatedModelName).clear();
 		}
 		associatedModelsMapForJoinTable.clear();
-	}
-
-	/**
+	}/**
 	 * Clear all the data in {@link #listToClearSelfFK}.
 	 */
 	private void clearFKNameList() {
 		getListToClearSelfFK().clear();
 		getListToClearAssociatedFK().clear();
-	}
-
-}
+	}}

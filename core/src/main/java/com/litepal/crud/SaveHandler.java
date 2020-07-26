@@ -1,41 +1,15 @@
-/*
- * Copyright (C)  Tony Green, LitePal Framework Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.litepal.crud;
-
-import android.content.ContentValues;
+package com.litepal.crud;import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-
-import com.litepal.Operator;
+import android.util.Log;import com.litepal.Operator;
 import com.litepal.annotation.Encrypt;
 import com.litepal.exceptions.LitePalSupportException;
 import com.litepal.crud.model.AssociationsInfo;
-import com.litepal.util.DBUtility;
-
-import java.lang.reflect.Field;
+import com.litepal.util.DBUtility;import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import static com.litepal.util.BaseUtility.changeCase;
-
-/**
+import java.util.Set;import static com.litepal.util.BaseUtility.changeCase;/**
  * This is a component under LitePalSupport. It deals with the saving stuff as
  * primary task. All the implementation based on the java reflection API and
  * Android SQLiteDatabase API. It will persist the model class into table. If
@@ -46,11 +20,7 @@ import static com.litepal.util.BaseUtility.changeCase;
  * @author Tony Green
  * @since 1.1
  */
-public class SaveHandler extends DataHandler {
-
-    private ContentValues values;
-
-    /**
+public class SaveHandler extends DataHandler {private ContentValues values;/**
 	 * Initialize {@link DataHandler#mDatabase} for operating database. Do not
 	 * allow to create instance of SaveHandler out of CRUD package.
 	 * 
@@ -60,9 +30,7 @@ public class SaveHandler extends DataHandler {
     public SaveHandler(SQLiteDatabase db) {
         values = new ContentValues();
 		mDatabase = db;
-	}
-
-	/**
+	}/**
 	 * The open interface for other classes in CRUD package to save a model. It
 	 * is called when a model class calls the save method. First of all, the
 	 * passed in baseObj will be saved into database. Then LitePal will analyze
@@ -92,9 +60,7 @@ public class SaveHandler extends DataHandler {
             analyzeAssociatedModels(baseObj, associationInfos);
 			doUpdateAction(baseObj, supportedFields, supportedGenericFields);
 		}
-	}
-
-	/**
+	}/**
 	 * The open interface for other classes in CRUD package to save a model
 	 * collection. It is called when developer calls
 	 * {@link Operator#saveAll(java.util.Collection)}. Each model in the collection
@@ -132,9 +98,7 @@ public class SaveHandler extends DataHandler {
 				baseObj.clearAssociatedData();
 			}
 		}
-	}
-
-	/**
+	}/**
 	 * Persisting model class into database happens here. But first
 	 * {@link #beforeSave(LitePalSupport, java.util.List, android.content.ContentValues)} will be called to
 	 * put the values for ContentValues. When the model is saved,
@@ -162,9 +126,7 @@ public class SaveHandler extends DataHandler {
 		beforeSave(baseObj, supportedFields, values);
 		long id = saving(baseObj, values);
 		afterSave(baseObj, supportedFields, supportedGenericFields, id);
-	}
-
-	/**
+	}/**
 	 * Before the self model is saved, it will be analyzed first. Put all the
 	 * data contained by the model into ContentValues, including the fields
 	 * value and foreign key value.
@@ -186,9 +148,7 @@ public class SaveHandler extends DataHandler {
 			IllegalAccessException, InvocationTargetException {
 		putFieldsValue(baseObj, supportedFields, values);
         putForeignKeyValue(values, baseObj);
-	}
-
-	/**
+	}/**
 	 * Calling {@link android.database.sqlite.SQLiteDatabase#insert(String, String, android.content.ContentValues)} to
 	 * persist the current model.
 	 * 
@@ -203,9 +163,7 @@ public class SaveHandler extends DataHandler {
             values.putNull("id");
         }
 		return mDatabase.insert(baseObj.getTableName(), null, values);
-	}
-
-	/**
+	}/**
 	 * After the model is saved, do the extra work that need to do.
 	 * 
 	 * @param baseObj
@@ -224,9 +182,7 @@ public class SaveHandler extends DataHandler {
         updateGenericTables(baseObj, supportedGenericFields, id);
         updateAssociatedTableWithFK(baseObj);
         insertIntermediateJoinTableValue(baseObj, false);
-	}
-
-	/**
+	}/**
 	 * When a model is associated with two different models.
 	 * 
 	 * @param baseObj
@@ -248,9 +204,7 @@ public class SaveHandler extends DataHandler {
 		beforeUpdate(baseObj, supportedFields, values);
 		updating(baseObj, values);
 		afterUpdate(baseObj, supportedGenericFields);
-	}
-
-	/**
+	}/**
 	 * Before updating model, it will be analyzed first. Put all the data
 	 * contained by the model into ContentValues, including the fields value and
 	 * foreign key value. If the associations between models has been removed.
@@ -276,9 +230,7 @@ public class SaveHandler extends DataHandler {
         for (String fkName : baseObj.getListToClearSelfFK()) {
             values.putNull(fkName);
         }
-	}
-
-	/**
+	}/**
 	 * Calling
 	 * {@link android.database.sqlite.SQLiteDatabase#update(String, android.content.ContentValues, String, String[])} to
 	 * update the current model.
@@ -293,9 +245,7 @@ public class SaveHandler extends DataHandler {
             mDatabase.update(baseObj.getTableName(), values, "id = ?",
                     new String[] { String.valueOf(baseObj.getBaseObjId()) });
         }
-	}
-
-	/**
+	}/**
 	 * After the model is updated, do the extra work that need to do.
 	 * 
 	 * @param baseObj
@@ -309,9 +259,7 @@ public class SaveHandler extends DataHandler {
         updateAssociatedTableWithFK(baseObj);
         insertIntermediateJoinTableValue(baseObj, true);
         clearFKValueInAssociatedTable(baseObj);
-	}
-
-	/**
+	}/**
 	 * Get the id field by the passed in field list.
 	 * 
 	 * @param supportedFields
@@ -325,9 +273,7 @@ public class SaveHandler extends DataHandler {
 			}
 		}
 		return null;
-	}
-
-	/**
+	}/**
 	 * If the model saved failed, throw an exception.
 	 * 
 	 * @param id
@@ -337,9 +283,7 @@ public class SaveHandler extends DataHandler {
 		if (id == -1) {
 			throw new LitePalSupportException(LitePalSupportException.SAVE_FAILED);
 		}
-	}
-
-	/**
+	}/**
 	 * Assign the generated id value to the model. The
 	 * {@link LitePalSupport#baseObjId} will be assigned anyway. If the model has a
 	 * field named id or _id, LitePal will assign it too. The
@@ -363,9 +307,7 @@ public class SaveHandler extends DataHandler {
 		} catch (Exception e) {
 			throw new LitePalSupportException(e.getMessage(), e);
 		}
-	}
-
-	/**
+	}/**
 	 * After saving a model, the id for this model will be returned. Assign this
 	 * id to the model's id or _id field if it exists.
 	 * 
@@ -396,9 +338,7 @@ public class SaveHandler extends DataHandler {
 			}
 			DynamicExecutor.setField(baseObj, idName, value, baseObj.getClass());
 		}
-	}
-
-	/**
+	}/**
 	 * If the table for this model have a foreign key column, the value of
 	 * foreign key id should be saved too.
 	 * 
@@ -411,9 +351,7 @@ public class SaveHandler extends DataHandler {
 			values.put(getForeignKeyColumnName(associatedTableName),
 					associatedModelMap.get(associatedTableName));
 		}
-	}
-
-	/**
+	}/**
 	 * Update the foreign keys in the associated model's table.
 	 * 
 	 * @param baseObj
@@ -431,9 +369,7 @@ public class SaveHandler extends DataHandler {
 				mDatabase.update(associatedTableName, values, getWhereOfIdsWithOr(ids), null);
 			}
 		}
-	}
-
-	/**
+	}/**
 	 * When the associations breaks between current model and associated models,
 	 * clear all the associated models' foreign key value if it exists.
 	 * 
@@ -449,9 +385,7 @@ public class SaveHandler extends DataHandler {
 			String whereClause = fkColumnName + " = " + baseObj.getBaseObjId();
 			mDatabase.update(associatedTableName, values, whereClause, null);
 		}
-	}
-
-	/**
+	}/**
 	 * Insert values into intermediate join tables for self model and associated
 	 * models.
 	 * 
@@ -477,9 +411,7 @@ public class SaveHandler extends DataHandler {
 				mDatabase.insert(joinTableName, null, values);
 			}
 		}
-	}
-
-	/**
+	}/**
 	 * Get the where clause to delete intermediate join table's value for
 	 * updating.
 	 * 
@@ -492,9 +424,7 @@ public class SaveHandler extends DataHandler {
 		where.append(getForeignKeyColumnName(baseObj.getTableName()));
 		where.append(" = ?");
 		return where.toString();
-	}
-
-	/**
+	}/**
 	 * Judge should assign id value to model's id field. The principle is that
 	 * if id name is not null, id type is not null and id is greater than 0,
 	 * then should assign id value to it.
@@ -510,9 +440,7 @@ public class SaveHandler extends DataHandler {
 	 */
 	private boolean shouldGiveModelIdValue(String idName, Class<?> idType, long id) {
 		return idName != null && idType != null && id > 0;
-	}
-
-    /**
+	}/**
      * Update the generic data in generic tables. Need to delete the related generic data before
      * saving, because generic data has no id.
      * @param baseObj
@@ -563,6 +491,4 @@ public class SaveHandler extends DataHandler {
                 }
             }
         }
-    }
-
-}
+    }}

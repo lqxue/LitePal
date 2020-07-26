@@ -1,32 +1,8 @@
-/*
- * Copyright (C)  Tony Green, LitePal Framework Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.litepal.tablemanager;
-
-import android.database.sqlite.SQLiteDatabase;
+package com.litepal.tablemanager;import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
-import android.text.TextUtils;
-
-import com.litepal.exceptions.InvalidAttributesException;
+import android.text.TextUtils;import com.litepal.exceptions.InvalidAttributesException;
 import com.litepal.parser.LitePalAttr;
-import com.litepal.LitePalApplication;
-
-import java.io.File;
-
-/**
+import com.litepal.LitePalApplication;import java.io.File;/**
  * The connector to connect database provided by LitePal. Users can use this
  * class to get the instance of SQLiteDatabase. But users still need to write
  * their own CRUD logic by the returned SQLiteDatabase. It will be improved in
@@ -35,14 +11,10 @@ import java.io.File;
  * @author Tony Green
  * @since 1.0
  */
-public class Connector {
-
-	/**
+public class Connector {/**
 	 * The quote of LitePalHelper.
 	 */
-	private static LitePalOpenHelper mLitePalHelper;
-
-	/**
+	private static LitePalOpenHelper mLitePalHelper;/**
 	 * Get a writable SQLiteDatabase.
 	 * 
 	 * There're a lot of ways to operate database in android. But LitePal
@@ -57,9 +29,7 @@ public class Connector {
 	public synchronized static SQLiteDatabase getWritableDatabase() {
 		LitePalOpenHelper litePalHelper = buildConnection();
 		return litePalHelper.getWritableDatabase();
-	}
-
-	/**
+	}/**
 	 * Call getDatabase directly will invoke the getWritableDatabase method by
 	 * default.
 	 * 
@@ -69,9 +39,7 @@ public class Connector {
 	 */
 	public static SQLiteDatabase getDatabase() {
 		return getWritableDatabase();
-	}
-
-	/**
+	}/**
 	 * Build a connection to the database. This progress will analysis the
 	 * litepal.xml file, and will check if the fields in LitePalAttr are valid,
 	 * and it will open a SQLiteOpenHelper to decide to create tables or update
@@ -104,9 +72,7 @@ public class Connector {
 			mLitePalHelper = new LitePalOpenHelper(dbName, litePalAttr.getVersion());
 		}
 		return mLitePalHelper;
-	}
-
-	/**
+	}/**
 	 * Never call this method. This is only used by internal.
 	 */
 	public static void clearLitePalOpenHelperInstance() {
@@ -114,6 +80,4 @@ public class Connector {
             mLitePalHelper.getWritableDatabase().close();
             mLitePalHelper = null;
         }
-	}
-
-}
+	}}

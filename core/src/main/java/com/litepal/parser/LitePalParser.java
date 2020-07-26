@@ -1,28 +1,6 @@
-/*
- * Copyright (C)  Tony Green, LitePal Framework Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.litepal.parser;
-
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
-
-import com.litepal.LitePalApplication;
+package com.litepal.parser;import java.io.IOException;
+import java.io.InputStream;import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;import com.litepal.LitePalApplication;
 import com.litepal.exceptions.ParseConfigurationFileException;
 import com.litepal.util.Const;
 import org.xml.sax.InputSource;
@@ -30,12 +8,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-import android.content.res.AssetManager;
-import android.content.res.Resources.NotFoundException;
-
-/**
+import org.xmlpull.v1.XmlPullParserFactory;import android.content.res.AssetManager;
+import android.content.res.Resources.NotFoundException;/**
  * The class is used to parse the litepal.xml file. There're three usual ways to
  * parse XML in android, SAX, Pull and DOM. LitePal use SAX as default option,
  * and DOM parser will be added soon.
@@ -43,54 +17,34 @@ import android.content.res.Resources.NotFoundException;
  * @author Tony Green
  * @since 1.0
  */
-public class LitePalParser {
-
-	/**
+public class LitePalParser {/**
 	 * Node name dbname.
 	 */
-	static final String NODE_DB_NAME = "dbname";
-
-	/**
+	static final String NODE_DB_NAME = "dbname";/**
 	 * Node name version.
 	 */
-	static final String NODE_VERSION = "version";
-
-	/**
+	static final String NODE_VERSION = "version";/**
 	 * Node name list. Currently not used.
 	 */
-	static final String NODE_LIST = "list";
-
-	/**
+	static final String NODE_LIST = "list";/**
 	 * Node name mapping.
 	 */
-	static final String NODE_MAPPING = "mapping";
-
-	/**
+	static final String NODE_MAPPING = "mapping";/**
 	 * Node name column case.
 	 */
-	static final String NODE_CASES = "cases";
-
-    /**
+	static final String NODE_CASES = "cases";/**
      * Node name column storage.
      */
-    static final String NODE_STORAGE = "storage";
-
-	/**
+    static final String NODE_STORAGE = "storage";/**
 	 * Attribute name value, for dbname and version node.
 	 */
-	static final String ATTR_VALUE = "value";
-
-	/**
+	static final String ATTR_VALUE = "value";/**
 	 * Attribute name class, for mapping node.
 	 */
-	static final String ATTR_CLASS = "class";
-
-	/**
+	static final String ATTR_CLASS = "class";/**
 	 * Store the parsed value of litepal.xml.
 	 */
-	private static LitePalParser parser;
-
-	/**
+	private static LitePalParser parser;/**
 	 * Analyze litepal.xml, and store the analyzed result in LitePalParser. Use
 	 * DomParse to parse the configuration file as default. SAXParser and
 	 * XmlPullParser is also optional, but not visible to developers.
@@ -100,9 +54,7 @@ public class LitePalParser {
 			parser = new LitePalParser();
 		}
 		return parser.usePullParse();
-	}
-
-	/**
+	}/**
 	 * Use SAXParser to parse the litepal.xml file. It will get the parsed
 	 * result from LitePalContentHandler and stored in the instance of
 	 * LitePalAttr.
@@ -131,9 +83,7 @@ public class LitePalParser {
 		} catch (IOException e) {
 			throw new ParseConfigurationFileException(ParseConfigurationFileException.IO_EXCEPTION);
 		}
-	}
-
-	/**
+	}/**
 	 * Use XmlPullParser to parse the litepal.xml file. It will store the result
 	 * in the instance of LitePalAttr.
 	 * 
@@ -182,9 +132,7 @@ public class LitePalParser {
 		} catch (IOException e) {
 			throw new ParseConfigurationFileException(ParseConfigurationFileException.IO_EXCEPTION);
 		}
-	}
-
-	/**
+	}/**
 	 * Iterates all files in the root of assets folder. If find litepal.xml,
 	 * open this file and return the input stream. Or throw
 	 * ParseConfigurationFileException.

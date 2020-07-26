@@ -1,34 +1,10 @@
-/*
- * Copyright (C)  Tony Green, LitePal Framework Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.litepal.util;
-
-import android.content.res.AssetManager;
-import android.text.TextUtils;
-
-import com.litepal.LitePalApplication;
+package com.litepal.util;import android.content.res.AssetManager;
+import android.text.TextUtils;import com.litepal.LitePalApplication;
 import com.litepal.exceptions.LitePalSupportException;
-import com.litepal.parser.LitePalAttr;
-
-import java.io.IOException;
+import com.litepal.parser.LitePalAttr;import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.Locale;
-
-/**
+import java.util.Locale;/**
  * A utility class to help LitePal with some base actions that might through any
  * components. These actions can help classes just do the jobs they care, and
  * help them out of the trivial work.
@@ -36,15 +12,11 @@ import java.util.Locale;
  * @author Tony Green
  * @since 1.0
  */
-public class BaseUtility {
-
-	/**
+public class BaseUtility {/**
 	 * Disable to create an instance of BaseUtility.
 	 */
 	private BaseUtility() {
-	}
-
-	/**
+	}/**
 	 * It will change the case of the passing parameter into the case defined in
 	 * litepal.xml file.
 	 * 
@@ -65,9 +37,7 @@ public class BaseUtility {
 			return string.toLowerCase(Locale.US);
 		}
 		return null;
-	}
-
-	/**
+	}/**
 	 * This helper method makes up the shortage of contains method in Collection
 	 * to support the function of case insensitive contains. It only supports
 	 * the String generic type of collection, cause other types have no cases
@@ -96,9 +66,7 @@ public class BaseUtility {
 			}
 		}
 		return contains;
-	}
-
-	/**
+	}/**
 	 * Capitalize make the first letter of the word be upper case.
 	 * 
 	 * @param string
@@ -110,9 +78,7 @@ public class BaseUtility {
 			return string.substring(0, 1).toUpperCase(Locale.US) + string.substring(1);
 		}
 		return string == null ? null : "";
-	}
-
-	/**
+	}/**
 	 * Count how many marks existed in string.
 	 * 
 	 * @param string
@@ -133,9 +99,7 @@ public class BaseUtility {
 			return count;
 		}
 		return 0;
-	}
-
-	/**
+	}/**
 	 * Check the number of question mark existed in conditions[0] equals the
 	 * number of rest conditions elements or not. If not equals, throws
 	 * LitePalSupportException.
@@ -156,9 +120,7 @@ public class BaseUtility {
 				}
 			}
 		}
-	}
-
-	/**
+	}/**
 	 * Judge a field type is supported or not. Currently only basic data types
 	 * and String are supported.
 	 * 
@@ -192,9 +154,7 @@ public class BaseUtility {
 			return true;
 		}
 		return false;
-	}
-
-    /**
+	}/**
      * Judge a generic type is supported or not. Currently only basic data types
      * and String are supported.
      *
@@ -221,9 +181,7 @@ public class BaseUtility {
             return true;
         }
         return false;
-    }
-
-    /**
+    }/**
      * If the litepal.xml configuration file exists.
      * @return True if exists, false otherwise.
      */
@@ -241,9 +199,7 @@ public class BaseUtility {
         } catch (IOException e) {
         }
         return false;
-    }
-
-    /**
+    }/**
      * Check the existence of the specific class and method.
      *
      * @param className
@@ -265,6 +221,4 @@ public class BaseUtility {
             e.printStackTrace();
         }
         return false;
-    }
-
-}
+    }}

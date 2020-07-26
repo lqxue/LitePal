@@ -1,39 +1,15 @@
-/*
- * Copyright (C)  Tony Green, LitePal Framework Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.litepal.crud;
-
-import android.database.sqlite.SQLiteDatabase;
-import android.text.TextUtils;
-
-import com.litepal.Operator;
+package com.litepal.crud;import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;import com.litepal.Operator;
 import com.litepal.exceptions.LitePalSupportException;
 import com.litepal.crud.model.AssociationsInfo;
 import com.litepal.util.BaseUtility;
 import com.litepal.util.Const;
-import com.litepal.util.DBUtility;
-
-import java.lang.reflect.Field;
+import com.litepal.util.DBUtility;import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-/**
+import java.util.Set;/**
  * This is a component under LitePalSupport. It deals with the deleting stuff as
  * primary task. If deletes a saved model or delete a record with id, the
  * cascade delete function would work. But considering efficiency, if deletes
@@ -43,15 +19,11 @@ import java.util.Set;
  * @author Tony Green
  * @since 1.1
  */
-public class DeleteHandler extends DataHandler {
-
-	/**
+public class DeleteHandler extends DataHandler {/**
 	 * To store associated tables of current model's table. Only used while
 	 * deleting by id and deleting all by model class.
 	 */
-	private List<String> foreignKeyTableToDelete;
-
-	/**
+	private List<String> foreignKeyTableToDelete;/**
 	 * Initialize {@link DataHandler#mDatabase} for operating database. Do not
 	 * allow to create instance of DeleteHandler out of CRUD package.
 	 * 
@@ -60,9 +32,7 @@ public class DeleteHandler extends DataHandler {
 	 */
     public DeleteHandler(SQLiteDatabase db) {
 		mDatabase = db;
-	}
-
-	/**
+	}/**
 	 * The open interface for other classes in CRUD package to delete. Using
 	 * baseObj to decide which record to delete. The baseObj must be saved
 	 * already(using {@link LitePalSupport#isSaved()} to test), or nothing will be
@@ -86,9 +56,7 @@ public class DeleteHandler extends DataHandler {
 			return rowsAffected;
 		}
 		return 0;
-	}
-
-	/**
+	}/**
 	 * The open interface for other classes in CRUD package to delete. Using
 	 * modelClass to decide which table to delete from, and id to decide a
 	 * specific row. This method can action cascade delete. When the record is
@@ -110,9 +78,7 @@ public class DeleteHandler extends DataHandler {
 				"id = " + id, null);
 		getForeignKeyTableToDelete().clear();
 		return rowsAffected;
-	}
-
-	/**
+	}/**
 	 * The open interface for other classes in CRUD package to delete multiple
 	 * rows. Using tableName to decide which table to delete from, and
 	 * conditions representing the WHERE part of an SQL statement.
@@ -131,9 +97,7 @@ public class DeleteHandler extends DataHandler {
         }
 		return mDatabase.delete(tableName, getWhereClause(conditions),
 				getWhereArgs(conditions));
-	}
-
-    @SuppressWarnings("unchecked")
+	}@SuppressWarnings("unchecked")
     public int onDeleteAll(Class<?> modelClass, String... conditions) {
 		BaseUtility.checkConditionsCorrect(conditions);
         if (conditions != null && conditions.length > 0) {
@@ -157,9 +121,7 @@ public class DeleteHandler extends DataHandler {
 				getWhereArgs(conditions));
 		getForeignKeyTableToDelete().clear();
 		return rowsAffected;
-	}
-
-	/**
+	}/**
 	 * Analyze the associations of modelClass and store the associated tables.
 	 * The associated tables might be used when deleting referenced data of a
 	 * specified row.
@@ -188,9 +150,7 @@ public class DeleteHandler extends DataHandler {
 				getForeignKeyTableToDelete().add(joinTableName);
 			}
 		}
-	}
-
-	/**
+	}/**
 	 * Use the analyzed result of associations to delete referenced data. So
 	 * this method must be called after {@link #analyzeAssociations(Class)}.
 	 * There're two parts of referenced data to delete. The foreign key rows in
@@ -212,9 +172,7 @@ public class DeleteHandler extends DataHandler {
 					+ " = " + id, null);
 		}
 		return rowsAffected;
-	}
-
-	private int deleteAllCascade(Class<?> modelClass, String... conditions) {
+	}private int deleteAllCascade(Class<?> modelClass, String... conditions) {
 		int rowsAffected = 0;
 		for (String associatedTableName : getForeignKeyTableToDelete()) {
 			String tableName = getTableName(modelClass);
@@ -230,18 +188,14 @@ public class DeleteHandler extends DataHandler {
 					BaseUtility.changeCase(whereClause.toString()), null);
 		}
 		return rowsAffected;
-	}
-	
-	private String buildConditionString(String... conditions) {
+	}private String buildConditionString(String... conditions) {
 		  int argCount = conditions.length - 1;
           String whereClause = conditions[0];
           for (int i = 0; i < argCount; i++) {
                   whereClause = whereClause.replaceFirst("\\?", "'" + conditions[i+1] + "'");
           }
           return whereClause;
-	}
-
-	/**
+	}/**
 	 * Analyze the associations of baseObj and store the result in it. The
 	 * associations will be used when deleting referenced data of baseObj.
 	 * 
@@ -257,9 +211,7 @@ public class DeleteHandler extends DataHandler {
 		} catch (Exception e) {
 			throw new LitePalSupportException(e.getMessage(), e);
 		}
-	}
-
-	/**
+	}/**
 	 * Clear associated models' save state. After this method, the associated
 	 * models of baseObj which data is removed from database will become
 	 * unsaved.
@@ -296,9 +248,7 @@ public class DeleteHandler extends DataHandler {
 		} catch (Exception e) {
 			throw new LitePalSupportException(e.getMessage(), e);
 		}
-	}
-
-	/**
+	}/**
 	 * Use the analyzed result of associations to delete referenced data. So
 	 * this method must be called after
 	 * {@link #analyzeAssociations(LitePalSupport)}. There're two parts of
@@ -315,9 +265,7 @@ public class DeleteHandler extends DataHandler {
 		rowsAffected = deleteAssociatedForeignKeyRows(baseObj);
 		rowsAffected += deleteAssociatedJoinTableRows(baseObj);
 		return rowsAffected;
-	}
-
-	/**
+	}/**
 	 * Delete the referenced rows of baseObj in associated tables(Many2One and
 	 * One2One conditions).
 	 * 
@@ -335,9 +283,7 @@ public class DeleteHandler extends DataHandler {
 					+ " = " + baseObj.getBaseObjId(), null);
 		}
 		return rowsAffected;
-	}
-
-	/**
+	}/**
 	 * Delete the referenced rows of baseObj in intermediate join
 	 * tables(Many2Many condition).
 	 * 
@@ -357,9 +303,7 @@ public class DeleteHandler extends DataHandler {
 					+ baseObj.getBaseObjId(), null);
 		}
 		return rowsAffected;
-	}
-
-	/**
+	}/**
 	 * Get all the associated tables of current model's table. Only used while
 	 * deleting by id.
 	 * 
@@ -370,9 +314,7 @@ public class DeleteHandler extends DataHandler {
 			foreignKeyTableToDelete = new ArrayList<String>();
 		}
 		return foreignKeyTableToDelete;
-	}
-
-    /**
+	}/**
      * Delete the generic data in generic tables while main data was deleted.
      * @param modelClass
      *          Used to get the generic table name and value id column.

@@ -1,41 +1,17 @@
-/*
- * Copyright (C)  Tony Green, LitePal Framework Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.litepal.tablemanager;
-
-import android.content.ContentValues;
+package com.litepal.tablemanager;import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.text.TextUtils;
-
-import com.litepal.exceptions.DatabaseGenerateException;
+import android.text.TextUtils;import com.litepal.exceptions.DatabaseGenerateException;
 import com.litepal.tablemanager.model.AssociationsModel;
 import com.litepal.tablemanager.model.ColumnModel;
 import com.litepal.tablemanager.model.GenericModel;
 import com.litepal.util.BaseUtility;
 import com.litepal.util.Const;
 import com.litepal.util.DBUtility;
-import com.litepal.util.LitePalLog;
-
-import java.util.ArrayList;
+import com.litepal.util.LitePalLog;import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
-
-/**
+import java.util.Locale;/**
  * When models have associations such as one2one, many2one or many2many, tables
  * should add foreign key column or create intermediate table to make the object
  * association mapping right. This process will be proceed automatically without
@@ -46,11 +22,7 @@ import java.util.Locale;
  * @author Tony Green
  * @since 1.0
  */
-public abstract class AssociationCreator extends Generator {
-
-	protected abstract void createOrUpgradeTable(SQLiteDatabase db, boolean force);
-
-	/**
+public abstract class AssociationCreator extends Generator {protected abstract void createOrUpgradeTable(SQLiteDatabase db, boolean force);/**
 	 * {@link AssociationCreator} analyzes two things. Add associations
 	 * including add foreign key column to tables and create intermediate join
 	 * tables.
@@ -58,9 +30,7 @@ public abstract class AssociationCreator extends Generator {
 	@Override
 	protected void addOrUpdateAssociation(SQLiteDatabase db, boolean force) {
 		addAssociations(getAllAssociations(), db, force);
-	}
-
-	/**
+	}/**
 	 * Generate a create table SQL by the passed in parameters. Note that it
 	 * will always generate a SQL with id/_id column in it as primary key and
 	 * this id is auto increment as integer if the autoIncrementId is true, or
@@ -110,9 +80,7 @@ public abstract class AssociationCreator extends Generator {
 		createTableSQL.append(")");
 		LitePalLog.d(TAG, "create table sql is >> " + createTableSQL);
 		return createTableSQL.toString();
-	}
-
-	/**
+	}/**
 	 * Generate a SQL for dropping table.
 	 * 
 	 * @param tableName
@@ -121,9 +89,7 @@ public abstract class AssociationCreator extends Generator {
 	 */
 	protected String generateDropTableSQL(String tableName) {
 		return "drop table if exists " + tableName;
-	}
-
-	/**
+	}/**
 	 * Generate a SQL for add new column into the existing table.
 	 * @param tableName
      *          The table which want to add a column
@@ -159,9 +125,7 @@ public abstract class AssociationCreator extends Generator {
         }
 		LitePalLog.d(TAG, "add column sql is >> " + addColumnSQL);
 		return addColumnSQL.toString();
-	}
-
-	/**
+	}/**
 	 * Judge the passed in column is a foreign key column format or not. Each
 	 * column name ends with _id will be considered as foreign key column
 	 * format.
@@ -176,9 +140,7 @@ public abstract class AssociationCreator extends Generator {
 			return columnName.toLowerCase(Locale.US).endsWith("_id") && !columnName.equalsIgnoreCase("_id");
 		}
 		return false;
-	}
-
-	/**
+	}/**
 	 * Once there's new table created. The table name will be saved into
 	 * table_schema as a copy. Each table name will be saved only once.
 	 * 
@@ -209,9 +171,7 @@ public abstract class AssociationCreator extends Generator {
 				cursor.close();
 			}
 		}
-	}
-
-	/**
+	}/**
 	 * Save the name of a created table into table_schema, but there're some
 	 * extra rules. Each table name should be only saved once, and special
 	 * tables will not be saved.
@@ -225,9 +185,7 @@ public abstract class AssociationCreator extends Generator {
 	 */
 	private boolean isNeedtoGiveACopy(Cursor cursor, String tableName) {
 		return !isValueExists(cursor, tableName) && !isSpecialTable(tableName);
-	}
-
-	/**
+	}/**
 	 * Judge the table name has already exist in the table_schema or not.
 	 * 
 	 * @param cursor
@@ -249,9 +207,7 @@ public abstract class AssociationCreator extends Generator {
 			} while (cursor.moveToNext());
 		}
 		return exist;
-	}
-
-	/**
+	}/**
 	 * Judge a table is a special table or not. Currently table_schema is a
 	 * special table.
 	 * 
@@ -261,9 +217,7 @@ public abstract class AssociationCreator extends Generator {
 	 */
 	private boolean isSpecialTable(String tableName) {
 		return Const.TableSchema.TABLE_NAME.equalsIgnoreCase(tableName);
-	}
-
-	/**
+	}/**
 	 * Analyzing all the association models in the collection. Judge their
 	 * association types. If it's one2one or many2one associations, add the
 	 * foreign key column to the associated table. If it's many2many
@@ -294,9 +248,7 @@ public abstract class AssociationCreator extends Generator {
         for (GenericModel genericModel : getGenericModels()) {
             createGenericTable(genericModel, db, force);
         }
-	}
-
-	/**
+	}/**
 	 * When it comes to many2many associations. Database need to create an
 	 * intermediate table for mapping this association. This method helps create
 	 * such a table, and the table name follows the concatenation of the two
@@ -335,9 +287,7 @@ public abstract class AssociationCreator extends Generator {
 		}
 		execute(sqls, db);
 		giveTableSchemaACopy(intermediateTableName, Const.TableSchema.INTERMEDIATE_JOIN_TABLE, db);
-	}
-
-    /**
+	}/**
      * When declared generic collection fields in model class. Database need to create
      * generic tables for mapping these fields. This method helps create such a table.
      *
@@ -373,9 +323,7 @@ public abstract class AssociationCreator extends Generator {
         }
         execute(sqls, db);
         giveTableSchemaACopy(tableName, Const.TableSchema.GENERIC_TABLE, db);
-    }
-
-	/**
+    }/**
 	 * This method is used to add many to one association or one to one
 	 * association on tables. It will automatically build a SQL to add foreign
 	 * key to a table. If the passed in table name or associated table name
@@ -421,9 +369,7 @@ public abstract class AssociationCreator extends Generator {
 			throw new DatabaseGenerateException(DatabaseGenerateException.TABLE_DOES_NOT_EXIST
 					+ tableName);
 		}
-	}
-
-    /**
+	}/**
      * Check if the ColumnModel list contains only id field.
      * @param columnModels
      *          List contains model fields.
@@ -434,6 +380,4 @@ public abstract class AssociationCreator extends Generator {
     		if (!columnModel.isIdColumn()) return false;
 		}
     	return true;
-    }
-
-}
+    }}

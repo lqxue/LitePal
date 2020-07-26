@@ -1,33 +1,11 @@
-/*
- * Copyright (C)  Tony Green, LitePal Framework Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.litepal.tablemanager;
-
-import android.content.Context;
+package com.litepal.tablemanager;import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
-import android.database.sqlite.SQLiteOpenHelper;
-
-import com.litepal.parser.LitePalAttr;
+import android.database.sqlite.SQLiteOpenHelper;import com.litepal.parser.LitePalAttr;
 import com.litepal.LitePalApplication;
 import com.litepal.Operator;
 import com.litepal.tablemanager.callback.DatabaseListener;
-import com.litepal.util.SharedUtil;
-
-/**
+import com.litepal.util.SharedUtil;/**
  * The database helper to generate and manage the tables. It will automate
  * create or upgrade the database file depends on the parameters passed in.
  *
@@ -41,9 +19,7 @@ import com.litepal.util.SharedUtil;
  * @since 1.0
  */
 class LitePalOpenHelper extends SQLiteOpenHelper {
-    public static final String TAG = "LitePalHelper";
-
-    /**
+    public static final String TAG = "LitePalHelper";/**
      * The standard constructor for SQLiteOpenHelper.
      *
      * @param context
@@ -62,9 +38,7 @@ class LitePalOpenHelper extends SQLiteOpenHelper {
      */
     LitePalOpenHelper(Context context, String name, CursorFactory factory, int version) {
         super(context, name, factory, version);
-    }
-
-    /**
+    }/**
      * A simple constructor for SQLiteOpenHelper with null for CursorFactory as
      * default.
      *
@@ -78,9 +52,7 @@ class LitePalOpenHelper extends SQLiteOpenHelper {
      */
     LitePalOpenHelper(String dbName, int version) {
         this(LitePalApplication.getContext(), dbName, null, version);
-    }
-
-    @Override
+    }@Override
     public void onCreate(SQLiteDatabase db) {
         Generator.create(db);
         final DatabaseListener listener = Operator.getDBListener();
@@ -92,9 +64,7 @@ class LitePalOpenHelper extends SQLiteOpenHelper {
                 }
             });
         }
-    }
-
-    @Override
+    }@Override
     public void onUpgrade(SQLiteDatabase db, final int oldVersion, final int newVersion) {
         Generator.upgrade(db);
         SharedUtil.updateVersion(LitePalAttr.getInstance().getExtraKeyName(), newVersion);
@@ -107,6 +77,4 @@ class LitePalOpenHelper extends SQLiteOpenHelper {
                 }
             });
         }
-    }
-
-}
+    }}

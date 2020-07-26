@@ -1,39 +1,15 @@
-/*
- * Copyright (C)  Tony Green, LitePal Framework Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.litepal.util;
-
-import android.database.Cursor;
+package com.litepal.util;import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.text.TextUtils;
-
-import com.litepal.exceptions.DatabaseGenerateException;
+import android.text.TextUtils;import com.litepal.exceptions.DatabaseGenerateException;
 import com.litepal.tablemanager.model.ColumnModel;
-import com.litepal.tablemanager.model.TableModel;
-
-import java.lang.reflect.Field;
+import com.litepal.tablemanager.model.TableModel;import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-/**
+import java.util.regex.Pattern;/**
  * A utility class to help LitePal with some database actions. These actions can
  * help classes just do the jobs they care, and help them out of the trivial
  * work.
@@ -41,27 +17,11 @@ import java.util.regex.Pattern;
  * @author Tony
  * @since 1.0
  */
-public class DBUtility {
-
-    private static final String TAG = "DBUtility";
-
-    private static final String SQLITE_KEYWORDS = ",abort,add,after,all,alter,and,as,asc,autoincrement,before,begin,between,by,cascade,check,collate,column,commit,conflict,constraint,create,cross,database,deferrable,deferred,delete,desc,distinct,drop,each,end,escape,except,exclusive,exists,foreign,from,glob,group,having,in,index,inner,insert,intersect,into,is,isnull,join,like,limit,match,natural,not,notnull,null,of,offset,on,or,order,outer,plan,pragma,primary,query,raise,references,regexp,reindex,release,rename,replace,restrict,right,rollback,row,savepoint,select,set,table,temp,temporary,then,to,transaction,trigger,union,unique,update,using,vacuum,values,view,virtual,when,where,";
-
-    private static final String KEYWORDS_COLUMN_SUFFIX = "_lpcolumn";
-
-    private static final String REG_OPERATOR = "\\s*(=|!=|<>|<|>)";
-
-    private static final String REG_FUZZY = "\\s+(not\\s+)?(like|between)\\s+";
-
-    private static final String REG_COLLECTION = "\\s+(not\\s+)?(in)\\s*\\(";
-
-    /**
+public class DBUtility {private static final String TAG = "DBUtility";private static final String SQLITE_KEYWORDS = ",abort,add,after,all,alter,and,as,asc,autoincrement,before,begin,between,by,cascade,check,collate,column,commit,conflict,constraint,create,cross,database,deferrable,deferred,delete,desc,distinct,drop,each,end,escape,except,exclusive,exists,foreign,from,glob,group,having,in,index,inner,insert,intersect,into,is,isnull,join,like,limit,match,natural,not,notnull,null,of,offset,on,or,order,outer,plan,pragma,primary,query,raise,references,regexp,reindex,release,rename,replace,restrict,right,rollback,row,savepoint,select,set,table,temp,temporary,then,to,transaction,trigger,union,unique,update,using,vacuum,values,view,virtual,when,where,";private static final String KEYWORDS_COLUMN_SUFFIX = "_lpcolumn";private static final String REG_OPERATOR = "\\s*(=|!=|<>|<|>)";private static final String REG_FUZZY = "\\s+(not\\s+)?(like|between)\\s+";private static final String REG_COLLECTION = "\\s+(not\\s+)?(in)\\s*\\(";/**
 	 * Disable to create an instance of DBUtility.
 	 */
 	private DBUtility() {
-	}
-
-	/**
+	}/**
 	 * Get the corresponding table name by the full class name with package. It
 	 * will only get the short class name without package name as table name.
 	 * 
@@ -80,9 +40,7 @@ public class DBUtility {
 			}
 		}
 		return null;
-	}
-
-	/**
+	}/**
 	 * Get the corresponding table name list by the full class name list with
 	 * package. Each table name will only get the short class name without
 	 * package.
@@ -99,9 +57,7 @@ public class DBUtility {
 			}
 		}
 		return tableNames;
-	}
-
-	/**
+	}/**
 	 * Get table name by the given foreign column name.
 	 * 
 	 * @param foreignColumnName
@@ -117,9 +73,7 @@ public class DBUtility {
 			return null;
 		}
 		return null;
-	}
-
-	/**
+	}/**
 	 * Create intermediate join table name by the concatenation of the two
 	 * target table names in alphabetical order with underline in the middle.
 	 * 
@@ -142,9 +96,7 @@ public class DBUtility {
             return intermediateTableName;
         }
         return null;
-	}
-
-    /**
+	}/**
      * Create generic table name by the concatenation of the class model's table name and simple
      * generic type name with underline in the middle.
      * @param className
@@ -157,9 +109,7 @@ public class DBUtility {
     public static String getGenericTableName(String className, String fieldName) {
         String tableName = getTableNameByClassName(className);
         return BaseUtility.changeCase(tableName + "_" + fieldName);
-    }
-
-    /**
+    }/**
      * The column name for referenced id in generic table.
      * @param className
      *          Name of the class model.
@@ -167,13 +117,9 @@ public class DBUtility {
      */
     public static String getGenericValueIdColumnName(String className) {
         return BaseUtility.changeCase(getTableNameByClassName(className) + "_id");
-    }
-
-    public static String getM2MSelfRefColumnName(Field field) {
+    }public static String getM2MSelfRefColumnName(Field field) {
         return BaseUtility.changeCase(field.getName() + "_id");
-    }
-
-	/**
+    }/**
 	 * Judge the table name is an intermediate table or not.
 	 * 
 	 * @param tableName
@@ -212,9 +158,7 @@ public class DBUtility {
 			}
 		}
 		return false;
-	}
-
-    /**
+	}/**
      * Judge the table name is an generic table or not.
      *
      * @param tableName
@@ -253,9 +197,7 @@ public class DBUtility {
             }
         }
         return false;
-    }
-
-	/**
+    }/**
 	 * Test if the table name passed in exists in the database. Cases are
 	 * ignored.
 	 * 
@@ -273,9 +215,7 @@ public class DBUtility {
 			exist = false;
 		}
 		return exist;
-	}
-
-	/**
+	}/**
 	 * Test if a column exists in a table. Cases are ignored.
 	 * 
 	 * @param columnName
@@ -315,9 +255,7 @@ public class DBUtility {
             }
         }
 		return exist;
-	}
-
-	/**
+	}/**
 	 * Find all table names in the database. If there's some wrong happens when
 	 * finding tables, it will throw exceptions.
 	 * 
@@ -348,9 +286,7 @@ public class DBUtility {
 			}
 		}
 		return tableNames;
-	}
-
-	/**
+	}/**
 	 * Look from the database to find a table named same as the table name in
 	 * table model. Then iterate the columns and types of this table to create a
 	 * new instance of table model. If there's no such a table in the database,
@@ -406,9 +342,7 @@ public class DBUtility {
 			throw new DatabaseGenerateException(
 					DatabaseGenerateException.TABLE_DOES_NOT_EXIST_WHEN_EXECUTING + tableName);
 		}
-	}
-
-    /**
+	}/**
      * Find all unique column names of specified table.
      * @param tableName
      *          The table to find unique columns.
@@ -447,9 +381,7 @@ public class DBUtility {
             }
         }
         return columns;
-    }
-
-    /**
+    }/**
      * If the field name is conflicted with SQLite keywords. Return true if conflicted, return false
      * otherwise.
      * @param fieldName
@@ -464,9 +396,7 @@ public class DBUtility {
             }
         }
         return false;
-    }
-
-    /**
+    }/**
      * Convert the passed in name to valid column name if the name is conflicted with SQLite keywords.
      * The convert rule is to append {@link #KEYWORDS_COLUMN_SUFFIX} to the name as new column name.
      * @param columnName
@@ -478,9 +408,7 @@ public class DBUtility {
             return columnName + KEYWORDS_COLUMN_SUFFIX;
         }
         return columnName;
-    }
-
-    /**
+    }/**
      * Convert the where clause if it contains invalid column names which conflict with SQLite keywords.
      * @param whereClause
      *          where clause for query, update or delete.
@@ -506,9 +434,7 @@ public class DBUtility {
             }
         }
         return whereClause;
-    }
-
-    /**
+    }/**
      * Convert the select clause if it contains invalid column names which conflict with SQLite keywords.
      * @param columns
      *          A String array of which columns to return. Passing null will
@@ -524,9 +450,7 @@ public class DBUtility {
             return convertedColumns;
         }
         return null;
-    }
-
-    /**
+    }/**
      * Convert the order by clause if it contains invalid column names which conflict with SQLite keywords.
      * @param orderBy
      *          How to order the rows, formatted as an SQL ORDER BY clause. Passing null will use
@@ -554,9 +478,7 @@ public class DBUtility {
             return orderBy;
         }
         return null;
-    }
-
-    /**
+    }/**
      * Convert the order by item if it is invalid column name which conflict with SQLite keywords.
      * @param orderByItem
      *          The single order by condition.
@@ -576,6 +498,4 @@ public class DBUtility {
             append = "";
         }
         return convertToValidColumnName(column) + append;
-    }
-
-}
+    }}

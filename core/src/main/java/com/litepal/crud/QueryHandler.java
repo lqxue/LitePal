@@ -1,38 +1,12 @@
-/*
- * Copyright (C)  Tony Green, LitePal Framework Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.litepal.crud;
-
-import java.util.List;
-
-import com.litepal.util.BaseUtility;
-import com.litepal.util.DBUtility;
-
-import android.database.sqlite.SQLiteDatabase;
-
-/**
+package com.litepal.crud;import java.util.List;import com.litepal.util.BaseUtility;
+import com.litepal.util.DBUtility;import android.database.sqlite.SQLiteDatabase;/**
  * This is a component under LitePalSupport. It deals with query stuff as primary
  * task.
  * 
  * @author Tony Green
  * @since 1.1
  */
-public class QueryHandler extends DataHandler {
-
-	/**
+public class QueryHandler extends DataHandler {/**
 	 * Initialize {@link DataHandler#mDatabase} for operating database. Do not
 	 * allow to create instance of QueryHandler out of CRUD package.
 	 * 
@@ -41,9 +15,7 @@ public class QueryHandler extends DataHandler {
 	 */
     public QueryHandler(SQLiteDatabase db) {
 		mDatabase = db;
-	}
-
-	/**
+	}/**
 	 * The open interface for other classes in CRUD package to query a record
 	 * based on id. If the result set is empty, gives null back.
 	 * 
@@ -62,9 +34,7 @@ public class QueryHandler extends DataHandler {
 			return dataList.get(0);
 		}
 		return null;
-	}
-
-	/**
+	}/**
 	 * The open interface for other classes in CRUD package to query the first
 	 * record in a table. If the result set is empty, gives null back.
 	 * 
@@ -81,9 +51,7 @@ public class QueryHandler extends DataHandler {
 			return dataList.get(0);
 		}
 		return null;
-	}
-
-	/**
+	}/**
 	 * The open interface for other classes in CRUD package to query the last
 	 * record in a table. If the result set is empty, gives null back.
 	 * 
@@ -100,9 +68,7 @@ public class QueryHandler extends DataHandler {
 			return dataList.get(0);
 		}
 		return null;
-	}
-
-	/**
+	}/**
 	 * The open interface for other classes in CRUD package to query multiple
 	 * records by an id array. Pass no ids means query all rows.
 	 * 
@@ -124,9 +90,7 @@ public class QueryHandler extends DataHandler {
 					null, getForeignKeyAssociations(modelClass.getName(), isEager));
 		}
 		return dataList;
-	}
-
-	/**
+	}/**
 	 * The open interface for other classes in CRUD package to query multiple
 	 * records by parameters.
 	 * 
@@ -159,9 +123,7 @@ public class QueryHandler extends DataHandler {
 		return query(modelClass, columns, getWhereClause(conditions),
                 getWhereArgs(conditions), null, null, orderBy, limit,
                 getForeignKeyAssociations(modelClass.getName(), isEager));
-	}
-
-	/**
+	}/**
 	 * The open interface for other classes in CRUD package to Count the
 	 * records.
 	 * 
@@ -178,9 +140,7 @@ public class QueryHandler extends DataHandler {
             conditions[0] = DBUtility.convertWhereClauseToColumnName(conditions[0]);
         }
 		return mathQuery(tableName, new String[] { "count(1)" }, conditions, int.class);
-	}
-
-	/**
+	}/**
 	 * The open interface for other classes in CRUD package to calculate the
 	 * average value on a given column.
 	 * 
@@ -200,9 +160,7 @@ public class QueryHandler extends DataHandler {
         }
 		return mathQuery(tableName, new String[] { "avg(" + column + ")" }, conditions,
 				double.class);
-	}
-
-	/**
+	}/**
 	 * The open interface for other classes in CRUD package to calculate the
 	 * maximum value on a given column.
 	 * 
@@ -223,9 +181,7 @@ public class QueryHandler extends DataHandler {
             conditions[0] = DBUtility.convertWhereClauseToColumnName(conditions[0]);
         }
 		return mathQuery(tableName, new String[] { "max(" + column + ")" }, conditions, type);
-	}
-
-	/**
+	}/**
 	 * The open interface for other classes in CRUD package to calculate the
 	 * minimum value on a given column.
 	 * 
@@ -246,9 +202,7 @@ public class QueryHandler extends DataHandler {
             conditions[0] = DBUtility.convertWhereClauseToColumnName(conditions[0]);
         }
 		return mathQuery(tableName, new String[] { "min(" + column + ")" }, conditions, type);
-	}
-
-	/**
+	}/**
 	 * The open interface for other classes in CRUD package to calculate the sum
 	 * of values on a given column.
 	 * 
@@ -269,6 +223,4 @@ public class QueryHandler extends DataHandler {
             conditions[0] = DBUtility.convertWhereClauseToColumnName(conditions[0]);
         }
 		return mathQuery(tableName, new String[] { "sum(" + column + ")" }, conditions, type);
-	}
-
-}
+	}}
