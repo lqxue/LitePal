@@ -1,7 +1,11 @@
-package com.litepal.annotation;import java.lang.annotation.ElementType;
+package com.litepal.annotation;
+
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;/**
+import java.lang.annotation.Target;
+
+/**
  * Used for encrypt string field value when persisted into database.
  *
  * @author Tony Green
@@ -9,7 +13,9 @@ import java.lang.annotation.Target;/**
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Encrypt {/**
+public @interface Encrypt {
+    /**
      * Set the algorithm for encryption.
      */
-    String algorithm();}
+    String algorithm();
+}

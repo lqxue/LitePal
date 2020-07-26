@@ -1,33 +1,50 @@
-package com.litepal;import android.text.TextUtils;import com.litepal.crud.LitePalSupport;
+package com.litepal;
+
+import android.text.TextUtils;
+
+import com.litepal.crud.LitePalSupport;
 import com.litepal.crud.QueryHandler;
 import com.litepal.exceptions.LitePalSupportException;
 import com.litepal.tablemanager.Connector;
-import com.litepal.util.BaseUtility;import java.util.List;/**
+import com.litepal.util.BaseUtility;
+
+import java.util.List;
+
+/**
  * Allows developers to query tables with fluent style.
  *
  * @author Tony Green
  * @since 2.0
  */
-public class FluentQuery {/**
+public class FluentQuery {
+    /**
      * Representing the selected columns in SQL.
      */
-    String[] mColumns;/**
+    String[] mColumns;
+    /**
      * Representing the where clause in SQL.
      */
-    String[] mConditions;/**
+    String[] mConditions;
+    /**
      * Representing the order by clause in SQL.
      */
-    String mOrderBy;/**
+    String mOrderBy;
+    /**
      * Representing the limit clause in SQL.
      */
-    String mLimit;/**
+    String mLimit;
+    /**
      * Representing the offset in SQL.
      */
-    String mOffset;/**
+    String mOffset;
+
+    /**
      * Do not allow to create instance by developers.
      */
     FluentQuery() {
-    }/**
+    }
+
+    /**
      * Declaring to query which columns in table.
      *
      * <pre>
@@ -43,7 +60,9 @@ public class FluentQuery {/**
     public FluentQuery select(String... columns) {
         mColumns = columns;
         return this;
-    }/**
+    }
+
+    /**
      * Declaring to query which rows in table.
      *
      * <pre>
@@ -60,7 +79,9 @@ public class FluentQuery {/**
     public FluentQuery where(String... conditions) {
         mConditions = conditions;
         return this;
-    }/**
+    }
+
+    /**
      * Declaring how to order the rows queried from table.
      *
      * <pre>
@@ -78,7 +99,9 @@ public class FluentQuery {/**
     public FluentQuery order(String column) {
         mOrderBy = column;
         return this;
-    }/**
+    }
+
+    /**
      * Limits the number of rows returned by the query.
      *
      * <pre>
@@ -94,7 +117,9 @@ public class FluentQuery {/**
     public FluentQuery limit(int value) {
         mLimit = String.valueOf(value);
         return this;
-    }/**
+    }
+
+    /**
      * Declaring the offset of rows returned by the query. This method must be
      * used with {@link #limit(int)}, or nothing will return.
      *
@@ -110,7 +135,9 @@ public class FluentQuery {/**
     public FluentQuery offset(int value) {
         mOffset = String.valueOf(value);
         return this;
-    }/**
+    }
+
+    /**
      * Finds multiple records by the cluster parameters. You can use the below
      * way to finish a complicated query:
      *
@@ -136,7 +163,9 @@ public class FluentQuery {/**
      */
     public <T> List<T> find(Class<T> modelClass) {
         return find(modelClass, false);
-    }/**
+    }
+
+    /**
      * It is mostly same as {@link FluentQuery#find(Class)} but an isEager
      * parameter. If set true the associated models will be loaded as well.
      * <br>
@@ -161,7 +190,9 @@ public class FluentQuery {/**
             }
             return queryHandler.onFind(modelClass, mColumns, mConditions, mOrderBy, limit, isEager);
         }
-    }/**
+    }
+
+    /**
      * Finds the first record by the cluster parameters. You can use the below
      * way to finish a complicated query:
      *
@@ -179,7 +210,9 @@ public class FluentQuery {/**
      */
     public <T> T findFirst(Class<T> modelClass) {
         return findFirst(modelClass, false);
-    }/**
+    }
+
+    /**
      * It is mostly same as {@link FluentQuery#findFirst(Class)} but an isEager
      * parameter. If set true the associated models will be loaded as well.
      * <br>
@@ -205,7 +238,9 @@ public class FluentQuery {/**
             }
             return null;
         }
-    }/**
+    }
+
+    /**
      * Finds the last record by the cluster parameters. You can use the below
      * way to finish a complicated query:
      *
@@ -223,7 +258,9 @@ public class FluentQuery {/**
      */
     public <T> T findLast(Class<T> modelClass) {
         return findLast(modelClass, false);
-    }/**
+    }
+
+    /**
      * It is mostly same as {@link FluentQuery#findLast(Class)} but an isEager
      * parameter. If set true the associated models will be loaded as well.
      * <br>
@@ -265,7 +302,9 @@ public class FluentQuery {/**
             }
             return null;
         }
-    }/**
+    }
+
+    /**
      * Count the records.
      *
      * <pre>
@@ -284,7 +323,9 @@ public class FluentQuery {/**
      */
     public int count(Class<?> modelClass) {
         return count(BaseUtility.changeCase(modelClass.getSimpleName()));
-    }/**
+    }
+
+    /**
      * Count the records.
      *
      * <pre>
@@ -306,7 +347,9 @@ public class FluentQuery {/**
             QueryHandler queryHandler = new QueryHandler(Connector.getDatabase());
             return queryHandler.onCount(tableName, mConditions);
         }
-    }/**
+    }
+
+    /**
      * Calculates the average value on a given column.
      *
      * <pre>
@@ -325,7 +368,9 @@ public class FluentQuery {/**
      */
     public double average(Class<?> modelClass, String column) {
         return average(BaseUtility.changeCase(modelClass.getSimpleName()), column);
-    }/**
+    }
+
+    /**
      * Calculates the average value on a given column.
      *
      * <pre>
@@ -347,7 +392,9 @@ public class FluentQuery {/**
             QueryHandler queryHandler = new QueryHandler(Connector.getDatabase());
             return queryHandler.onAverage(tableName, column, mConditions);
         }
-    }/**
+    }
+
+    /**
      * Calculates the maximum value on a given column. The value is returned
      * with the same data type of the column.
      *
@@ -368,7 +415,9 @@ public class FluentQuery {/**
      */
     public <T> T max(Class<?> modelClass, String columnName, Class<T> columnType) {
         return max(BaseUtility.changeCase(modelClass.getSimpleName()), columnName, columnType);
-    }/**
+    }
+
+    /**
      * Calculates the maximum value on a given column. The value is returned
      * with the same data type of the column.
      *
@@ -392,7 +441,9 @@ public class FluentQuery {/**
             QueryHandler queryHandler = new QueryHandler(Connector.getDatabase());
             return queryHandler.onMax(tableName, columnName, mConditions, columnType);
         }
-    }/**
+    }
+
+    /**
      * Calculates the minimum value on a given column. The value is returned
      * with the same data type of the column.
      *
@@ -413,7 +464,9 @@ public class FluentQuery {/**
      */
     public <T> T min(Class<?> modelClass, String columnName, Class<T> columnType) {
         return min(BaseUtility.changeCase(modelClass.getSimpleName()), columnName, columnType);
-    }/**
+    }
+
+    /**
      * Calculates the minimum value on a given column. The value is returned
      * with the same data type of the column.
      *
@@ -437,7 +490,9 @@ public class FluentQuery {/**
             QueryHandler queryHandler = new QueryHandler(Connector.getDatabase());
             return queryHandler.onMin(tableName, columnName, mConditions, columnType);
         }
-    }/**
+    }
+
+    /**
      * Calculates the sum of values on a given column. The value is returned
      * with the same data type of the column.
      *
@@ -458,7 +513,9 @@ public class FluentQuery {/**
      */
     public <T> T sum(Class<?> modelClass, String columnName, Class<T> columnType) {
         return sum(BaseUtility.changeCase(modelClass.getSimpleName()), columnName, columnType);
-    }/**
+    }
+
+    /**
      * Calculates the sum of values on a given column. The value is returned
      * with the same data type of the column.
      *
@@ -482,4 +539,5 @@ public class FluentQuery {/**
             QueryHandler queryHandler = new QueryHandler(Connector.getDatabase());
             return queryHandler.onSum(tableName, columnName, mConditions, columnType);
         }
-    }}
+    }
+}

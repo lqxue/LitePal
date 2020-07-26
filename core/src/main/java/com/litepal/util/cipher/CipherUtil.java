@@ -1,15 +1,25 @@
-package com.litepal.util.cipher;import android.text.TextUtils;import java.nio.charset.Charset;
+package com.litepal.util.cipher;
+
+import android.text.TextUtils;
+
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;/**
+import java.security.NoSuchAlgorithmException;
+
+/**
  * Utility to manage encryption and decryption for different algorithms.
  *
  * @author Tony Green
  * @since 1.6
  */
-public class CipherUtil {private static final char[] DIGITS_UPPER = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};public static String aesKey = "LitePalKey";/**
+public class CipherUtil {
+    private static final char[] DIGITS_UPPER = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+    public static String aesKey = "LitePalKey";
+
+    /**
      * Encrypt the plain text with AES algorithm.
-     * @param plainText
-     *          The plain text.
+     *
+     * @param plainText The plain text.
      * @return The Encrypt content.
      */
     public static String aesEncrypt(String plainText) {
@@ -22,10 +32,12 @@ public class CipherUtil {private static final char[] DIGITS_UPPER = {'0', '1', '
             e.printStackTrace();
         }
         return null;
-    }/**
+    }
+
+    /**
      * Decrypt the encrypted text with AES algorithm.
-     * @param encryptedText
-     *          The encrypted text.
+     *
+     * @param encryptedText The encrypted text.
      * @return The plain content.
      */
     public static String aesDecrypt(String encryptedText) {
@@ -38,10 +50,12 @@ public class CipherUtil {private static final char[] DIGITS_UPPER = {'0', '1', '
             e.printStackTrace();
         }
         return null;
-    }/**
+    }
+
+    /**
      * Encrypt the plain text with MD5 algorithm.
-     * @param plainText
-     *          The plain text.
+     *
+     * @param plainText The plain text.
      * @return The Encrypt content.
      */
     public static String md5Encrypt(String plainText) {
@@ -53,7 +67,9 @@ public class CipherUtil {private static final char[] DIGITS_UPPER = {'0', '1', '
             e.printStackTrace();
         }
         return "";
-    }private static char[] toHex(byte[] data) {
+    }
+
+    private static char[] toHex(byte[] data) {
         char[] toDigits = DIGITS_UPPER;
         int l = data.length;
         char[] out = new char[l << 1];
@@ -63,4 +79,5 @@ public class CipherUtil {private static final char[] DIGITS_UPPER = {'0', '1', '
             out[j++] = toDigits[0x0F & data[i]];
         }
         return out;
-    }}
+    }
+}

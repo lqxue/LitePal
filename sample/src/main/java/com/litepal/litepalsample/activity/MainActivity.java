@@ -19,10 +19,9 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_save_student).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StudentDao studentDao = new StudentDao(Student.class.getSimpleName(), 1, Student.class.getName());
+                StudentDao studentDao = new StudentDao(Student.class.getSimpleName(), 4, Student.class.getName());
                 Student student = new Student();
                 student.setAge("18");
-                student.setName("老王");
                 try {
                     studentDao.insert(student);
                 } catch (Exception e) {
