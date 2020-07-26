@@ -138,39 +138,6 @@ public class Many2ManyAnalyzer extends AssociationsAnalyzer {
 	}
 
 	/**
-	 * Check if the associations between self model and associated model is
-	 * already saved into intermediate join table.<br>
-	 * Make sure baseObj and associatedModel are saved already, or the result
-	 * might be wrong.
-	 * 
-	 * @param baseObj
-	 *            The baseObj currently want to persist or update.
-	 * @param associatedModel
-	 *            The associated model of baseObj.
-	 * @return If the associations between them is saved into intermediate join
-	 *         table, return true. Otherwise return false.
-	 */
-	@SuppressWarnings("unused")
-	@Deprecated
-	private boolean isDataExists(LitePalSupport baseObj, LitePalSupport associatedModel) {
-		boolean exists = false;
-		SQLiteDatabase db = Connector.getDatabase();
-		Cursor cursor = null;
-		try {
-			cursor = db.query(getJoinTableName(baseObj, associatedModel), null,
-					getSelection(baseObj, associatedModel),
-					getSelectionArgs(baseObj, associatedModel), null, null, null);
-			exists = cursor.getCount() > 0;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return true;
-		} finally {
-			cursor.close();
-		}
-		return exists;
-	}
-
-	/**
 	 * Build the selection for querying the data in table. Column names are the
 	 * table names with _id as suffix.
 	 * 

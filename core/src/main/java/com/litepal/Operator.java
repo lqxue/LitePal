@@ -34,12 +34,6 @@ import com.litepal.parser.LitePalParser;
 import com.litepal.tablemanager.Connector;
 import com.litepal.tablemanager.callback.DatabaseListener;
 import com.litepal.crud.DeleteHandler;
-import com.litepal.crud.async.AverageExecutor;
-import com.litepal.crud.async.CountExecutor;
-import com.litepal.crud.async.FindExecutor;
-import com.litepal.crud.async.FindMultiExecutor;
-import com.litepal.crud.async.SaveExecutor;
-import com.litepal.crud.async.UpdateOrDeleteExecutor;
 import com.litepal.util.BaseUtility;
 import com.litepal.util.Const;
 import com.litepal.util.DBUtility;
@@ -348,15 +342,6 @@ public class Operator {
     }
 
     /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static CountExecutor countAsync(final Class<?> modelClass) {
-        return countAsync(BaseUtility.changeCase(DBUtility.getTableNameByClassName(modelClass.getName())));
-    }
-
-    /**
      * Count the records.
      *
      * <pre>
@@ -382,33 +367,6 @@ public class Operator {
     }
 
     /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static CountExecutor countAsync(final String tableName) {
-        final CountExecutor executor = new CountExecutor();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LitePalSupport.class) {
-                    final int count = count(tableName);
-                    if (executor.getListener() != null) {
-                        Operator.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                executor.getListener().onFinish(count);
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        executor.submit(runnable);
-        return executor;
-    }
-
-    /**
      * Calculates the average value on a given column.
      *
      * <pre>
@@ -429,15 +387,6 @@ public class Operator {
      */
     public static double average(Class<?> modelClass, String column) {
         return average(BaseUtility.changeCase(DBUtility.getTableNameByClassName(modelClass.getName())), column);
-    }
-
-    /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static AverageExecutor averageAsync(final Class<?> modelClass, final String column) {
-        return averageAsync(BaseUtility.changeCase(DBUtility.getTableNameByClassName(modelClass.getName())), column);
     }
 
     /**
@@ -467,33 +416,6 @@ public class Operator {
     }
 
     /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static AverageExecutor averageAsync(final String tableName, final String column) {
-        final AverageExecutor executor = new AverageExecutor();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LitePalSupport.class) {
-                    final double average = average(tableName, column);
-                    if (executor.getListener() != null) {
-                        Operator.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                executor.getListener().onFinish(average);
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        executor.submit(runnable);
-        return executor;
-    }
-
-    /**
      * Calculates the maximum value on a given column. The value is returned
      * with the same data type of the column.
      *
@@ -517,15 +439,6 @@ public class Operator {
      */
     public static <T> T max(Class<?> modelClass, String columnName, Class<T> columnType) {
         return max(BaseUtility.changeCase(DBUtility.getTableNameByClassName(modelClass.getName())), columnName, columnType);
-    }
-
-    /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static <T> FindExecutor<T> maxAsync(final Class<?> modelClass, final String columnName, final Class<T> columnType) {
-        return maxAsync(BaseUtility.changeCase(DBUtility.getTableNameByClassName(modelClass.getName())), columnName, columnType);
     }
 
     /**
@@ -558,33 +471,6 @@ public class Operator {
     }
 
     /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static <T> FindExecutor<T> maxAsync(final String tableName, final String columnName, final Class<T> columnType) {
-        final FindExecutor<T> executor = new FindExecutor<>();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LitePalSupport.class) {
-                    final T t = max(tableName, columnName, columnType);
-                    if (executor.getListener() != null) {
-                        Operator.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                executor.getListener().onFinish(t);
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        executor.submit(runnable);
-        return executor;
-    }
-
-    /**
      * Calculates the minimum value on a given column. The value is returned
      * with the same data type of the column.
      *
@@ -608,15 +494,6 @@ public class Operator {
      */
     public static <T> T min(Class<?> modelClass, String columnName, Class<T> columnType) {
         return min(BaseUtility.changeCase(DBUtility.getTableNameByClassName(modelClass.getName())), columnName, columnType);
-    }
-
-    /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static <T> FindExecutor<T> minAsync(final Class<?> modelClass, final String columnName, final Class<T> columnType) {
-        return minAsync(BaseUtility.changeCase(DBUtility.getTableNameByClassName(modelClass.getName())), columnName, columnType);
     }
 
     /**
@@ -649,33 +526,6 @@ public class Operator {
     }
 
     /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static <T> FindExecutor<T> minAsync(final String tableName, final String columnName, final Class<T> columnType) {
-        final FindExecutor<T> executor = new FindExecutor<>();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LitePalSupport.class) {
-                    final T t = min(tableName, columnName, columnType);
-                    if (executor.getListener() != null) {
-                        Operator.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                executor.getListener().onFinish(t);
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        executor.submit(runnable);
-        return executor;
-    }
-
-    /**
      * Calculates the sum of values on a given column. The value is returned
      * with the same data type of the column.
      *
@@ -699,15 +549,6 @@ public class Operator {
      */
     public static <T> T sum(Class<?> modelClass, String columnName, Class<T> columnType) {
         return sum(BaseUtility.changeCase(DBUtility.getTableNameByClassName(modelClass.getName())), columnName, columnType);
-    }
-
-    /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static <T> FindExecutor<T> sumAsync(final Class<?> modelClass, final String columnName, final Class<T> columnType) {
-        return sumAsync(BaseUtility.changeCase(DBUtility.getTableNameByClassName(modelClass.getName())), columnName, columnType);
     }
 
     /**
@@ -740,33 +581,6 @@ public class Operator {
     }
 
     /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static <T> FindExecutor<T> sumAsync(final String tableName, final String columnName, final Class<T> columnType) {
-        final FindExecutor<T> executor = new FindExecutor<>();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LitePalSupport.class) {
-                    final T t = sum(tableName, columnName, columnType);
-                    if (executor.getListener() != null) {
-                        Operator.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                executor.getListener().onFinish(t);
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        executor.submit(runnable);
-        return executor;
-    }
-
-    /**
      * Finds the record by a specific id.
      *
      * <pre>
@@ -788,15 +602,6 @@ public class Operator {
      */
     public static <T> T find(Class<T> modelClass, long id) {
         return find(modelClass, id, false);
-    }
-
-    /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static <T> FindExecutor<T> findAsync(Class<T> modelClass, long id) {
-        return findAsync(modelClass, id, false);
     }
 
     /**
@@ -822,33 +627,6 @@ public class Operator {
     }
 
     /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static <T> FindExecutor<T> findAsync(final Class<T> modelClass, final long id, final boolean isEager) {
-        final FindExecutor<T> executor = new FindExecutor<>();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LitePalSupport.class) {
-                    final T t = find(modelClass, id, isEager);
-                    if (executor.getListener() != null) {
-                        Operator.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                executor.getListener().onFinish(t);
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        executor.submit(runnable);
-        return executor;
-    }
-
-    /**
      * Finds the first record of a single table.
      *
      * <pre>
@@ -865,15 +643,6 @@ public class Operator {
      */
     public static <T> T findFirst(Class<T> modelClass) {
         return findFirst(modelClass, false);
-    }
-
-    /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static <T> FindExecutor<T> findFirstAsync(Class<T> modelClass) {
-        return findFirstAsync(modelClass, false);
     }
 
     /**
@@ -897,33 +666,6 @@ public class Operator {
     }
 
     /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static <T> FindExecutor<T> findFirstAsync(final Class<T> modelClass, final boolean isEager) {
-        final FindExecutor<T> executor = new FindExecutor<>();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LitePalSupport.class) {
-                    final T t = findFirst(modelClass, isEager);
-                    if (executor.getListener() != null) {
-                        Operator.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                executor.getListener().onFinish(t);
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        executor.submit(runnable);
-        return executor;
-    }
-
-    /**
      * Finds the last record of a single table.
      *
      * <pre>
@@ -940,15 +682,6 @@ public class Operator {
      */
     public static <T> T findLast(Class<T> modelClass) {
         return findLast(modelClass, false);
-    }
-
-    /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static <T> FindExecutor<T> findLastAsync(Class<T> modelClass) {
-        return findLastAsync(modelClass, false);
     }
 
     /**
@@ -969,33 +702,6 @@ public class Operator {
             QueryHandler queryHandler = new QueryHandler(Connector.getDatabase());
             return queryHandler.onFindLast(modelClass, isEager);
         }
-    }
-
-    /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static <T> FindExecutor<T> findLastAsync(final Class<T> modelClass, final boolean isEager) {
-        final FindExecutor<T> executor = new FindExecutor<>();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LitePalSupport.class) {
-                    final T t = findLast(modelClass, isEager);
-                    if (executor.getListener() != null) {
-                        Operator.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                executor.getListener().onFinish(t);
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        executor.submit(runnable);
-        return executor;
     }
 
     /**
@@ -1033,15 +739,6 @@ public class Operator {
     }
 
     /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static <T> FindMultiExecutor<T> findAllAsync(Class<T> modelClass, long... ids) {
-        return findAllAsync(modelClass, false, ids);
-    }
-
-    /**
      * It is mostly same as {@link Operator#findAll(Class, long...)} but an
      * isEager parameter. If set true the associated models will be loaded as well.
      * <br>
@@ -1062,33 +759,6 @@ public class Operator {
             QueryHandler queryHandler = new QueryHandler(Connector.getDatabase());
             return queryHandler.onFindAll(modelClass, isEager, ids);
         }
-    }
-
-    /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static <T> FindMultiExecutor<T> findAllAsync(final Class<T> modelClass, final boolean isEager, final long... ids) {
-        final FindMultiExecutor<T> executor = new FindMultiExecutor<>();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LitePalSupport.class) {
-                    final List<T> t = findAll(modelClass, isEager, ids);
-                    if (executor.getListener() != null) {
-                        Operator.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                executor.getListener().onFinish(t);
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        executor.submit(runnable);
-        return executor;
     }
 
     /**
@@ -1161,33 +831,6 @@ public class Operator {
     }
 
     /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static UpdateOrDeleteExecutor deleteAsync(final Class<?> modelClass, final long id) {
-        final UpdateOrDeleteExecutor executor = new UpdateOrDeleteExecutor();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LitePalSupport.class) {
-                    final int rowsAffected = delete(modelClass, id);
-                    if (executor.getListener() != null) {
-                        Operator.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                executor.getListener().onFinish(rowsAffected);
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        executor.submit(runnable);
-        return executor;
-    }
-
-    /**
      * Deletes all records with details given if they match a set of conditions
      * supplied. This method constructs a single SQL DELETE statement and sends
      * it to the database.
@@ -1228,33 +871,6 @@ public class Operator {
     }
 
     /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static UpdateOrDeleteExecutor deleteAllAsync(final Class<?> modelClass, final String... conditions) {
-        final UpdateOrDeleteExecutor executor = new UpdateOrDeleteExecutor();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LitePalSupport.class) {
-                    final int rowsAffected = deleteAll(modelClass, conditions);
-                    if (executor.getListener() != null) {
-                        Operator.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                executor.getListener().onFinish(rowsAffected);
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        executor.submit(runnable);
-        return executor;
-    }
-
-    /**
      * Deletes all records with details given if they match a set of conditions
      * supplied. This method constructs a single SQL DELETE statement and sends
      * it to the database.
@@ -1289,33 +905,6 @@ public class Operator {
     }
 
     /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static UpdateOrDeleteExecutor deleteAllAsync(final String tableName, final String... conditions) {
-        final UpdateOrDeleteExecutor executor = new UpdateOrDeleteExecutor();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LitePalSupport.class) {
-                    final int rowsAffected = deleteAll(tableName, conditions);
-                    if (executor.getListener() != null) {
-                        Operator.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                executor.getListener().onFinish(rowsAffected);
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        executor.submit(runnable);
-        return executor;
-    }
-
-    /**
      * Updates the corresponding record by id with ContentValues. Returns the
      * number of affected rows.
      *
@@ -1341,33 +930,6 @@ public class Operator {
             UpdateHandler updateHandler = new UpdateHandler(Connector.getDatabase());
             return updateHandler.onUpdate(modelClass, id, values);
         }
-    }
-
-    /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static UpdateOrDeleteExecutor updateAsync(final Class<?> modelClass, final ContentValues values, final long id) {
-        final UpdateOrDeleteExecutor executor = new UpdateOrDeleteExecutor();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LitePalSupport.class) {
-                    final int rowsAffected = update(modelClass, values, id);
-                    if (executor.getListener() != null) {
-                        Operator.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                executor.getListener().onFinish(rowsAffected);
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        executor.submit(runnable);
-        return executor;
     }
 
     /**
@@ -1406,16 +968,6 @@ public class Operator {
     }
 
     /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static UpdateOrDeleteExecutor updateAllAsync(Class<?> modelClass, ContentValues values, String... conditions) {
-        return updateAllAsync(BaseUtility.changeCase(DBUtility.getTableNameByClassName(
-                modelClass.getName())), values, conditions);
-    }
-
-    /**
      * Updates all records with details given if they match a set of conditions
      * supplied. This method constructs a single SQL UPDATE statement and sends
      * it to the database.
@@ -1450,33 +1002,6 @@ public class Operator {
             UpdateHandler updateHandler = new UpdateHandler(Connector.getDatabase());
             return updateHandler.onUpdateAll(tableName, values, conditions);
         }
-    }
-
-    /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static UpdateOrDeleteExecutor updateAllAsync(final String tableName, final ContentValues values, final String... conditions) {
-        final UpdateOrDeleteExecutor executor = new UpdateOrDeleteExecutor();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LitePalSupport.class) {
-                    final int rowsAffected = updateAll(tableName, values, conditions);
-                    if (executor.getListener() != null) {
-                        Operator.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                executor.getListener().onFinish(rowsAffected);
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        executor.submit(runnable);
-        return executor;
     }
 
     /**
@@ -1521,40 +1046,6 @@ public class Operator {
                 db.endTransaction();
             }
         }
-    }
-
-    /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public static <T extends LitePalSupport> SaveExecutor saveAllAsync(final Collection<T> collection) {
-        final SaveExecutor executor = new SaveExecutor();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LitePalSupport.class) {
-                    boolean success;
-                    try {
-                        saveAll(collection);
-                        success = true;
-                    } catch (Exception e) {
-                        success = false;
-                    }
-                    final boolean result = success;
-                    if (executor.getListener() != null) {
-                        Operator.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                executor.getListener().onFinish(result);
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        executor.submit(runnable);
-        return executor;
     }
 
     /**

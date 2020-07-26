@@ -21,8 +21,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.litepal.exceptions.LitePalSupportException;
 import com.litepal.tablemanager.Connector;
 import com.litepal.Operator;
-import com.litepal.crud.async.SaveExecutor;
-import com.litepal.crud.async.UpdateOrDeleteExecutor;
 import com.litepal.util.BaseUtility;
 import com.litepal.util.DBUtility;
 
@@ -153,33 +151,6 @@ public class LitePalSupport {
         }
 	}
 
-    /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public UpdateOrDeleteExecutor deleteAsync() {
-        final UpdateOrDeleteExecutor executor = new UpdateOrDeleteExecutor();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LitePalSupport.class) {
-                    final int rowsAffected = delete();
-                    if (executor.getListener() != null) {
-                        Operator.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                executor.getListener().onFinish(rowsAffected);
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        executor.submit(runnable);
-        return executor;
-    }
-
 	/**
 	 * Updates the corresponding record by id. Use setXxx to decide which
 	 * columns to update.
@@ -218,33 +189,6 @@ public class LitePalSupport {
             }
         }
 	}
-
-    /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public UpdateOrDeleteExecutor updateAsync(final long id) {
-        final UpdateOrDeleteExecutor executor = new UpdateOrDeleteExecutor();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LitePalSupport.class) {
-                    final int rowsAffected = update(id);
-                    if (executor.getListener() != null) {
-                        Operator.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                executor.getListener().onFinish(rowsAffected);
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        executor.submit(runnable);
-        return executor;
-    }
 
 	/**
 	 * Updates all records with details given if they match a set of conditions
@@ -293,33 +237,6 @@ public class LitePalSupport {
         }
 	}
 
-    /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public UpdateOrDeleteExecutor updateAllAsync(final String... conditions) {
-        final UpdateOrDeleteExecutor executor = new UpdateOrDeleteExecutor();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LitePalSupport.class) {
-                    final int rowsAffected = updateAll(conditions);
-                    if (executor.getListener() != null) {
-                        Operator.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                executor.getListener().onFinish(rowsAffected);
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        executor.submit(runnable);
-        return executor;
-    }
-
 	/**
 	 * Saves the model. <br>
 	 * 
@@ -353,33 +270,6 @@ public class LitePalSupport {
             return false;
         }
 	}
-
-    /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public SaveExecutor saveAsync() {
-        final SaveExecutor executor = new SaveExecutor();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LitePalSupport.class) {
-                    final boolean success = save();
-                    if (executor.getListener() != null) {
-                        Operator.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                executor.getListener().onFinish(success);
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        executor.submit(runnable);
-        return executor;
-    }
 
     /**
 	 * Saves the model. <br>
@@ -482,33 +372,6 @@ public class LitePalSupport {
                 }
             }
         }
-    }
-
-    /**
-     * This method is deprecated and will be removed in the future releases.
-     * Handle async db operation in your own logic instead.
-     */
-    @Deprecated
-    public SaveExecutor saveOrUpdateAsync(final String... conditions) {
-        final SaveExecutor executor = new SaveExecutor();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LitePalSupport.class) {
-                    final boolean success = saveOrUpdate(conditions);
-                    if (executor.getListener() != null) {
-                        Operator.getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                executor.getListener().onFinish(success);
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        executor.submit(runnable);
-        return executor;
     }
 
 	/**
