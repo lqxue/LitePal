@@ -1,15 +1,14 @@
 package com.litepal.litepalsample.activity;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.litepal.litepalsample.R;
 import com.litepal.litepalsample.db.StudentDao;
 import com.litepal.litepalsample.model.Student;
 
-public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
